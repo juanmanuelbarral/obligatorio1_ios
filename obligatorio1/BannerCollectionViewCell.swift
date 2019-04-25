@@ -10,4 +10,10 @@ import UIKit
 
 class BannerCollectionViewCell: UICollectionViewCell {
     
+    // OUTLETS
+    @IBOutlet weak var bannerImageView: UIImageView!
+    @IBOutlet weak var bannerTextLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
+    
+    
 }

@@ -63,15 +63,15 @@
 			isa = PBXGroup;
 			children = (
 				92D16790226CBA2900E0110F /* AppDelegate.swift */,
-				92D16797226CBA2B00E0110F /* Assets.xcassets */,
-				92D167A4226CC68700E0110F /* CheckoutViewController.swift */,
-				92D167A2226CC67200E0110F /* HomeViewController.swift */,
 				92D1679C226CBA2B00E0110F /* Info.plist */,
-				92D16799226CBA2B00E0110F /* LaunchScreen.storyboard */,
-				92D16794226CBA2900E0110F /* Main.storyboard */,
-				920373BA226D3CC9009A6C16 /* CartCollectionViewCell.swift */,
-				920373B6226D3BDB009A6C16 /* ItemTableViewCell.swift */,
+				92D16797226CBA2B00E0110F /* Assets.xcassets */,
+				92D167A2226CC67200E0110F /* HomeViewController.swift */,
 				920373B4226D3B7A009A6C16 /* BannerCollectionViewCell.swift */,
+				920373B6226D3BDB009A6C16 /* ItemTableViewCell.swift */,
+				92D167A4226CC68700E0110F /* CheckoutViewController.swift */,
+				920373BA226D3CC9009A6C16 /* CartCollectionViewCell.swift */,
+				92D16794226CBA2900E0110F /* Main.storyboard */,
+				92D16799226CBA2B00E0110F /* LaunchScreen.storyboard */,
 			);
 			path = obligatorio1;
 			sourceTree = "<group>";
