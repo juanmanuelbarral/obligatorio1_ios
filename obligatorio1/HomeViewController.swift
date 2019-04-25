@@ -10,10 +10,17 @@ import UIKit
 
 class HomeViewController: UIViewController {
 
+    // OUTLETS
+    @IBOutlet weak var bannerCollectionView: UICollectionView!
+    @IBOutlet weak var itemsTableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        bannerCollectionView.dataSource = self
+        bannerCollectionView.delegate = self
+        itemsTableView.dataSource = self
+        itemsTableView.dataSource = self
     }
     
 
@@ -27,4 +34,34 @@ class HomeViewController: UIViewController {
     }
     */
 
+}
+
+extension HomeViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        <#code#>
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        <#code#>
+    }
+    
+}
+
+extension HomeViewController: UICollectionViewDelegate {
+    
+}
+
+extension HomeViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        <#code#>
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        <#code#>
+    }
+    
+}
+
+extension HomeViewController: UITableViewDelegate {
+    
 }

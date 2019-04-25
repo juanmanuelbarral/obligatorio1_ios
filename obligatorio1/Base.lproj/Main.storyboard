@@ -217,6 +217,8 @@
                         <barButtonItem key="rightBarButtonItem" title="Cart Item" image="icon-cart" id="U4j-5V-Ff3"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="bannerCollectionView" destination="yEs-ta-sW3" id="P3b-AM-wng"/>
+                        <outlet property="itemsTableView" destination="d0b-IS-Le9" id="k5I-BP-8se"/>
                         <segue destination="GYx-xl-kIz" kind="show" identifier="toCheckoutViewController" id="2ft-t3-GF3"/>
                     </connections>
                 </viewController>
@@ -351,6 +353,9 @@
                     <navigationItem key="navigationItem" id="kLI-2W-790">
                         <barButtonItem key="leftBarButtonItem" title="Item" image="icon-back" id="Vac-aG-U4E"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="cartCollectionView" destination="1NI-eS-YOO" id="3Bf-7o-28c"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bje-Ka-dD7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

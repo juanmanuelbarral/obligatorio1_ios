@@ -10,10 +10,15 @@ import UIKit
 
 class CheckoutViewController: UIViewController {
 
+    // OUTLET
+    @IBOutlet weak var cartCollectionView: UICollectionView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        cartCollectionView.dataSource = self
+        cartCollectionView.delegate = self
     }
     
 
@@ -27,4 +32,19 @@ class CheckoutViewController: UIViewController {
     }
     */
 
+}
+
+extension CheckoutViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        <#code#>
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        <#code#>
+    }
+    
+}
+
+extension CheckoutViewController: UICollectionViewDelegate {
+    
 }
