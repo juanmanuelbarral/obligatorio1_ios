@@ -62,6 +62,25 @@
 			path = "Data Models";
 			sourceTree = "<group>";
 		};
+		92B7F39E2276C07A00ED9427 /* Home View */ = {
+			isa = PBXGroup;
+			children = (
+				92D167A2226CC67200E0110F /* HomeViewController.swift */,
+				920373B6226D3BDB009A6C16 /* ItemTableViewCell.swift */,
+				920373B4226D3B7A009A6C16 /* BannerCollectionViewCell.swift */,
+			);
+			path = "Home View";
+			sourceTree = "<group>";
+		};
+		92B7F39F2276C08700ED9427 /* Checkout View */ = {
+			isa = PBXGroup;
+			children = (
+				92D167A4226CC68700E0110F /* CheckoutViewController.swift */,
+				920373BA226D3CC9009A6C16 /* CartCollectionViewCell.swift */,
+			);
+			path = "Checkout View";
+			sourceTree = "<group>";
+		};
 		92D16784226CBA2900E0110F = {
 			isa = PBXGroup;
 			children = (
@@ -85,11 +104,8 @@
 				92D1679C226CBA2B00E0110F /* Info.plist */,
 				92D16797226CBA2B00E0110F /* Assets.xcassets */,
 				920FE30922727F950073805D /* Data Models */,
-				92D167A2226CC67200E0110F /* HomeViewController.swift */,
-				920373B4226D3B7A009A6C16 /* BannerCollectionViewCell.swift */,
-				920373B6226D3BDB009A6C16 /* ItemTableViewCell.swift */,
-				92D167A4226CC68700E0110F /* CheckoutViewController.swift */,
-				920373BA226D3CC9009A6C16 /* CartCollectionViewCell.swift */,
+				92B7F39E2276C07A00ED9427 /* Home View */,
+				92B7F39F2276C08700ED9427 /* Checkout View */,
 				92D16794226CBA2900E0110F /* Main.storyboard */,
 				92D16799226CBA2B00E0110F /* LaunchScreen.storyboard */,
 			);
