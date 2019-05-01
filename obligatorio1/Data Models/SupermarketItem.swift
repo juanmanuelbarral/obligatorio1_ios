@@ -8,9 +8,9 @@
 
 import Foundation
 
-enum Category: String {
-    case Fruits = "Fruits"
-    case Veggies = "Veggies"
+enum Category: CaseIterable {
+    case Fruits
+    case Veggies
 }
 
 class SupermarketItem {
