@@ -94,10 +94,21 @@ extension HomeViewController: UITableViewDataSource {
         let category = Category.allCases[indexPath.section]
         let item = supermarketItems[category]![indexPath.row]
         
+        // Formatting the image, name and price
         cell.itemImageView.image = UIImage(named: item.imageLogo)
         cell.itemImageView.layer.cornerRadius = cell.itemImageView.frame.size.width/2
         cell.nameLabel.text = item.name
         cell.priceLabel.text = item.getPriceString()
+        
+        // Formatting the addButton, and quantityControllerView
+        cell.addButton.isHidden = false
+        cell.addButton.layer.cornerRadius = 20
+        cell.addButton.layer.borderColor = UIColor.blue.cgColor
+        cell.addButton.layer.borderWidth = 1
+        cell.quantityControlView.isHidden = true
+        cell.quantityControlView.layer.cornerRadius = 20
+        cell.quantityControlView.layer.borderColor = UIColor.lightGray.cgColor
+        cell.quantityControlView.layer.borderWidth = 1
         
         return cell
     }

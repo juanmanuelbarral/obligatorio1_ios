@@ -14,8 +14,8 @@ class ItemTableViewCell: UITableViewCell {
     @IBOutlet weak var itemImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
-    @IBOutlet weak var quantityLabel: UILabel!
     @IBOutlet weak var addButton: UIButton!
+    @IBOutlet weak var quantityLabel: UILabel!
     @IBOutlet weak var plusButton: UIButton!
     @IBOutlet weak var minusButton: UIButton!
     @IBOutlet weak var quantityControlView: UIView!
@@ -33,5 +33,6 @@ class ItemTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
 
 }
