@@ -13,9 +13,11 @@ class HomeViewController: UIViewController {
     // OUTLETS
     @IBOutlet weak var bannerCollectionView: UICollectionView!
     @IBOutlet weak var itemsTableView: UITableView!
+    @IBOutlet weak var scrollBanner: UIPageControl!
     
     private var supermarketItems: [Category:[SupermarketItem]] = [:]
     private var bannerItems: [BannerItem] = []
+    private var cartItems: [String:CheckoutItem] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,18 +31,12 @@ class HomeViewController: UIViewController {
         itemsTableView.dataSource = self
         
         configureCells()
+        
+        // Configuring the scroll banner
+        scrollBanner.numberOfPages = bannerItems.count
+        scrollBanner.currentPage = 0
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
@@ -57,13 +53,25 @@ extension HomeViewController: UICollectionViewDataSource {
         
         let banner = bannerItems[indexPath.row]
         cell.bannerImageView.image = UIImage(named: banner.image)
+        cell.bannerImageView.layer.cornerRadius = 5
         cell.nameLabel.text = banner.name
         return cell
     }
     
 }
 
-extension HomeViewController: UICollectionViewDelegate {
+extension HomeViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let bannerCollectionViewSize = bannerCollectionView.frame.size
+        let height = bannerCollectionViewSize.height
+        let width = bannerCollectionViewSize.width
+        return CGSize(width: width, height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        scrollBanner.currentPage = indexPath.row
+    }
     
 }
 
@@ -123,5 +131,7 @@ extension HomeViewController: UITableViewDelegate {
         itemsTableView.rowHeight = UITableView.automaticDimension
         itemsTableView.estimatedRowHeight = 90
     }
+    
+    
     
 }
