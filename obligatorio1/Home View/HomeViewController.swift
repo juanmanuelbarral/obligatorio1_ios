@@ -30,8 +30,6 @@ class HomeViewController: UIViewController {
         itemsTableView.dataSource = self
         itemsTableView.dataSource = self
         
-        configureCells()
-        
         // Configuring the scroll banner
         scrollBanner.numberOfPages = bannerItems.count
         scrollBanner.currentPage = 0
@@ -183,13 +181,6 @@ extension HomeViewController: UITableViewDataSource {
 }
 
 extension HomeViewController: UITableViewDelegate {
-    
-    private func configureCells() {
-        
-//        itemsTableView config
-//        itemsTableView.rowHeight = UITableView.automaticDimension
-//        itemsTableView.estimatedRowHeight = 90
-    }
     
     private func onAddButtonClick(indexPath: IndexPath) {
         
