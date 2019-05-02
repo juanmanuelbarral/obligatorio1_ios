@@ -12,6 +12,11 @@ class CheckoutViewController: UIViewController {
 
     // OUTLET
     @IBOutlet weak var cartCollectionView: UICollectionView!
+    @IBOutlet weak var checkoutButton: UIButton!
+    @IBOutlet weak var finalPriceLabel: UILabel!
+    
+    var checkoutItems: [String:CheckoutItem] = [:]
+    private var finalPrice: Int = 0
     
     
     override func viewDidLoad() {
@@ -19,28 +24,23 @@ class CheckoutViewController: UIViewController {
 
         cartCollectionView.dataSource = self
         cartCollectionView.delegate = self
+        
+        // Checkout button style
+        checkoutButton.layer.cornerRadius = checkoutButton.frame.size.height/2
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
 extension CheckoutViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        <#code#>
+        // TODO
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        <#code#>
+        // TODO
+        return UICollectionViewCell()
     }
     
 }

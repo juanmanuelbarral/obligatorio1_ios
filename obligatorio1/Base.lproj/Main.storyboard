@@ -230,7 +230,11 @@
                         <viewLayoutGuide key="safeArea" id="5st-0K-F8m"/>
                     </view>
                     <navigationItem key="navigationItem" id="kK7-sn-UaS">
-                        <barButtonItem key="rightBarButtonItem" title="Cart Item" image="icon-cart" id="U4j-5V-Ff3"/>
+                        <barButtonItem key="rightBarButtonItem" title="Cart Item" image="icon-cart" id="U4j-5V-Ff3">
+                            <connections>
+                                <action selector="cartNavigationButtonClick:" destination="0WW-Hx-8Bj" id="t4H-1Y-JA0"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="bannerCollectionView" destination="yEs-ta-sW3" id="P3b-AM-wng"/>
@@ -252,44 +256,43 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="avO-yU-CDD">
-                                <rect key="frame" x="15" y="671" width="384" height="40"/>
-                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="15" y="651" width="384" height="60"/>
+                                <color key="backgroundColor" red="0.0" green="0.42568469483901394" blue="0.88253489847715738" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="bkR-0j-hJa"/>
+                                    <constraint firstAttribute="height" constant="60" id="bkR-0j-hJa"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                 <state key="normal" title="Checkout">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0tw-1x-wo5" userLabel="Total Price View">
-                                <rect key="frame" x="15" y="586" width="384" height="80"/>
+                                <rect key="frame" x="15" y="566" width="384" height="80"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WFD-hj-9Ja" userLabel="Total">
-                                        <rect key="frame" x="5" y="29.666666666666629" width="42" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <rect key="frame" x="10.000000000000004" y="29" width="54.333333333333343" height="27.666666666666671"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="24"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$xx.xx" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fUC-a6-gkc" userLabel="Price Label">
-                                        <rect key="frame" x="329.33333333333331" y="29.666666666666629" width="49.666666666666686" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <rect key="frame" x="268.33333333333331" y="19.666666666666625" width="105.66666666666669" height="40.666666666666657"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="34"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="fUC-a6-gkc" firstAttribute="centerY" secondItem="WFD-hj-9Ja" secondAttribute="centerY" id="42U-WU-K99"/>
-                                    <constraint firstAttribute="trailing" secondItem="fUC-a6-gkc" secondAttribute="trailing" constant="5" id="5tR-eF-c7g"/>
-                                    <constraint firstItem="WFD-hj-9Ja" firstAttribute="centerY" secondItem="0tw-1x-wo5" secondAttribute="centerY" id="QgA-Ag-FTG"/>
-                                    <constraint firstItem="WFD-hj-9Ja" firstAttribute="leading" secondItem="0tw-1x-wo5" secondAttribute="leading" constant="5" id="nRx-LS-PU7"/>
+                                    <constraint firstItem="fUC-a6-gkc" firstAttribute="firstBaseline" secondItem="WFD-hj-9Ja" secondAttribute="firstBaseline" id="42U-WU-K99"/>
+                                    <constraint firstAttribute="trailing" secondItem="fUC-a6-gkc" secondAttribute="trailing" constant="10" id="5tR-eF-c7g"/>
+                                    <constraint firstItem="fUC-a6-gkc" firstAttribute="centerY" secondItem="0tw-1x-wo5" secondAttribute="centerY" id="Xxt-YA-aWZ"/>
+                                    <constraint firstItem="WFD-hj-9Ja" firstAttribute="leading" secondItem="0tw-1x-wo5" secondAttribute="leading" constant="10" id="nRx-LS-PU7"/>
                                     <constraint firstAttribute="height" constant="80" id="tum-ex-grt"/>
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="1NI-eS-YOO" userLabel="Cart Collection View">
-                                <rect key="frame" x="15" y="64" width="384" height="517"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <rect key="frame" x="15" y="64" width="384" height="497"/>
+                                <color key="backgroundColor" red="0.97647058819999999" green="0.97647058819999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="XWD-vk-FAN">
                                     <size key="itemSize" width="160" height="220"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -312,21 +315,21 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gcT-ww-Ivq" userLabel="Item Name Label">
-                                                    <rect key="frame" x="13" y="165" width="45" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <rect key="frame" x="13" y="165" width="53" height="23"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$xx" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AAx-Bt-UVh" userLabel="Item Price Label">
-                                                    <rect key="frame" x="119" y="165" width="28" height="21"/>
+                                                    <rect key="frame" x="119" y="166" width="28" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="x units" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CG6-Q3-Lj9" userLabel="Units Quantity Label">
-                                                    <rect key="frame" x="13" y="194" width="50" height="21"/>
+                                                    <rect key="frame" x="13" y="196" width="50" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -352,7 +355,7 @@
                                 </cells>
                             </collectionView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="1NI-eS-YOO" firstAttribute="top" secondItem="te5-Ap-Xhe" secondAttribute="top" id="3Xk-do-Ps6"/>
                             <constraint firstItem="avO-yU-CDD" firstAttribute="centerX" secondItem="te5-Ap-Xhe" secondAttribute="centerX" id="4em-WI-9i5"/>
@@ -372,6 +375,8 @@
                     </navigationItem>
                     <connections>
                         <outlet property="cartCollectionView" destination="1NI-eS-YOO" id="3Bf-7o-28c"/>
+                        <outlet property="checkoutButton" destination="avO-yU-CDD" id="mfV-Kq-70A"/>
+                        <outlet property="finalPriceLabel" destination="fUC-a6-gkc" id="qlH-bA-8Ol"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bje-Ka-dD7" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -37,6 +37,12 @@ class HomeViewController: UIViewController {
         scrollBanner.currentPage = 0
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let checkoutViewController = segue.destination as? CheckoutViewController {
+            checkoutViewController.checkoutItems = self.checkoutItems
+        }
+    }
+    
     private func getIndexPath(of element: Any, tableView: UITableView) -> IndexPath?
     {
         if let view =  element as? UIView
@@ -68,6 +74,10 @@ class HomeViewController: UIViewController {
         {
             onMinusButtonClick(indexPath: indexPath)
         }
+    }
+    
+    @IBAction func cartNavigationButtonClick(_ sender: Any) {
+        performSegue(withIdentifier: "toCheckoutViewController", sender: nil)
     }
     
 }
