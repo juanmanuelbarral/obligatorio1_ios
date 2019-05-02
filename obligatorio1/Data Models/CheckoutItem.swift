@@ -36,4 +36,12 @@ class CheckoutItem {
     func getUnits() -> Int {
         return units
     }
+    
+    func getMax() -> Int {
+        return MAX_UNITS
+    }
+    
+    func getMin() -> Int {
+        return MIN_UNITS
+    }
 }

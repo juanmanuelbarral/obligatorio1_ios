@@ -17,7 +17,7 @@ class HomeViewController: UIViewController {
     
     private var supermarketItems: [Category:[SupermarketItem]] = [:]
     private var bannerItems: [BannerItem] = []
-    private var cartItems: [String:CheckoutItem] = [:]
+    private var checkoutItems: [String:CheckoutItem] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +37,39 @@ class HomeViewController: UIViewController {
         scrollBanner.currentPage = 0
     }
     
-
+    private func getIndexPath(of element: Any, tableView: UITableView) -> IndexPath?
+    {
+        if let view =  element as? UIView
+        {
+            // Converting to table view coordinate system
+            let pos = view.convert(CGPoint.zero, to: tableView)
+            // Getting the index path according to the converted position
+            return tableView.indexPathForRow(at: pos)
+        }
+        return nil
+    }
+    
+    @IBAction func addButtonClick(_ sender: Any) {
+        if let indexPath = getIndexPath(of: sender, tableView: itemsTableView)
+        {
+            onAddButtonClick(indexPath: indexPath)
+        }
+    }
+    
+    @IBAction func plusButtonClick(_ sender: Any) {
+        if let indexPath = getIndexPath(of: sender, tableView: itemsTableView)
+        {
+            onPlusButtonClick(indexPath: indexPath)
+        }
+    }
+    
+    @IBAction func minusButtonClick(_ sender: Any) {
+        if let indexPath = getIndexPath(of: sender, tableView: itemsTableView)
+        {
+            onMinusButtonClick(indexPath: indexPath)
+        }
+    }
+    
 }
 
 extension HomeViewController: UICollectionViewDataSource {
@@ -118,6 +150,10 @@ extension HomeViewController: UITableViewDataSource {
         cell.quantityControlView.layer.borderColor = UIColor.lightGray.cgColor
         cell.quantityControlView.layer.borderWidth = 1
         
+        // Formating the cell
+        // setting selection style to none so the cell doesn't turn gray or blue when touching it
+        cell.selectionStyle = UITableViewCell.SelectionStyle.none
+        
         return cell
     }
     
@@ -132,6 +168,81 @@ extension HomeViewController: UITableViewDelegate {
         itemsTableView.estimatedRowHeight = 90
     }
     
+    private func onAddButtonClick(indexPath: IndexPath) {
+        
+        let category = Category.allCases[indexPath.section]
+        let item = supermarketItems[category]![indexPath.row]
+        guard let cell = itemsTableView.cellForRow(at: indexPath) as? ItemTableViewCell else {
+            fatalError("The cell is not ItemTableViewCell type")
+        }
+        
+        // Add item to cart with quantity in 1
+        let newCheckoutItem = CheckoutItem(item: item, units: 1)
+        checkoutItems.updateValue(newCheckoutItem, forKey: item.name)
+        // Hide add button
+        cell.addButton.isHidden = true
+        // Set quantity label and show quantityControlView
+        cell.quantityLabel.text = String(newCheckoutItem.getUnits())
+        cell.quantityControlView.isHidden = false
+        
+    }
     
+    private func onPlusButtonClick(indexPath: IndexPath) {
+        
+        let category = Category.allCases[indexPath.section]
+        let supermarketItem = supermarketItems[category]![indexPath.row]
+        guard let checkoutItem = checkoutItems[supermarketItem.name]  else {
+            fatalError("There should be a checkout item for \(supermarketItem.name)")
+        }
+        guard let cell = itemsTableView.cellForRow(at: indexPath) as? ItemTableViewCell else {
+            fatalError("The cell is not ItemTableViewCell type")
+        }
+        
+        // Check if we are going to reach the maximum quantity
+        if checkoutItem.getUnits() == (checkoutItem.getMax()-1) {
+            // Disable plus button so they can't go over the maximum
+            cell.plusButton.isEnabled = false
+        }
+        
+        // Increase the checkoutItem quantity
+        checkoutItem.setUnits(units: checkoutItem.getUnits()+1)
+        checkoutItems.updateValue(checkoutItem, forKey: supermarketItem.name)
+        // Update the quantity label
+        cell.quantityLabel.text = String(checkoutItem.getUnits())
+    }
+    
+    private func onMinusButtonClick(indexPath: IndexPath) {
+        
+        let category = Category.allCases[indexPath.section]
+        let supermarketItem = supermarketItems[category]![indexPath.row]
+        guard let checkoutItem = checkoutItems[supermarketItem.name]  else {
+            fatalError("There should be a checkout item for \(supermarketItem.name)")
+        }
+        guard let cell = itemsTableView.cellForRow(at: indexPath) as? ItemTableViewCell else {
+            fatalError("The cell is not ItemTableViewCell type")
+        }
+        
+        // If the current quantity equals max, enable plus button again
+        if checkoutItem.getUnits() == checkoutItem.getMax() {
+            cell.plusButton.isEnabled = true
+        }
+        
+        // If the current quantity is 1
+        if checkoutItem.getUnits() == 1 {
+            // Remove from checkoutItems
+            checkoutItems.removeValue(forKey: supermarketItem.name)
+            print(checkoutItems)
+            // Show add button
+            cell.addButton.isHidden = false
+            // Hide quantityControlView
+            cell.quantityControlView.isHidden = true
+        } else {
+            // Decrease checkoutItem quantity
+            checkoutItem.setUnits(units: checkoutItem.getUnits()-1)
+            checkoutItems.updateValue(checkoutItem, forKey: supermarketItem.name)
+            // Update the quantity label
+            cell.quantityLabel.text = String(checkoutItem.getUnits())
+        }
+    }
     
 }
