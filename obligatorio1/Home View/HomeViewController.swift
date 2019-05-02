@@ -17,7 +17,7 @@ class HomeViewController: UIViewController {
     
     private var supermarketItems: [Category:[SupermarketItem]] = [:]
     private var bannerItems: [BannerItem] = []
-    private var checkoutItems: [String:CheckoutItem] = [:]
+    private var checkoutItems: [CheckoutItem] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +43,7 @@ class HomeViewController: UIViewController {
         }
     }
     
+    // Function to get the indexPath of the buttons in a cell of a tableView
     private func getIndexPath(of element: Any, tableView: UITableView) -> IndexPath?
     {
         if let view =  element as? UIView
@@ -55,23 +56,34 @@ class HomeViewController: UIViewController {
         return nil
     }
     
+    private func getCheckoutItemIndex(name: String) -> Int? {
+        var index = 0
+        while index < checkoutItems.count {
+            if checkoutItems[index].item.name == name {
+                return index
+            } else {
+                index += 1
+            }
+        }
+        
+        return nil
+    }
+    
     @IBAction func addButtonClick(_ sender: Any) {
-        if let indexPath = getIndexPath(of: sender, tableView: itemsTableView)
-        {
+        if let indexPath = getIndexPath(of: sender, tableView: itemsTableView) {
             onAddButtonClick(indexPath: indexPath)
         }
     }
     
     @IBAction func plusButtonClick(_ sender: Any) {
-        if let indexPath = getIndexPath(of: sender, tableView: itemsTableView)
-        {
+        if let indexPath = getIndexPath(of: sender, tableView: itemsTableView) {
             onPlusButtonClick(indexPath: indexPath)
+            
         }
     }
     
     @IBAction func minusButtonClick(_ sender: Any) {
-        if let indexPath = getIndexPath(of: sender, tableView: itemsTableView)
-        {
+        if let indexPath = getIndexPath(of: sender, tableView: itemsTableView) {
             onMinusButtonClick(indexPath: indexPath)
         }
     }
@@ -111,6 +123,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: width, height: height)
     }
     
+    // Function for changing the scroll of the banner
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         scrollBanner.currentPage = indexPath.row
     }
@@ -174,8 +187,8 @@ extension HomeViewController: UITableViewDelegate {
     private func configureCells() {
         
 //        itemsTableView config
-        itemsTableView.rowHeight = UITableView.automaticDimension
-        itemsTableView.estimatedRowHeight = 90
+//        itemsTableView.rowHeight = UITableView.automaticDimension
+//        itemsTableView.estimatedRowHeight = 90
     }
     
     private func onAddButtonClick(indexPath: IndexPath) {
@@ -188,9 +201,11 @@ extension HomeViewController: UITableViewDelegate {
         
         // Add item to cart with quantity in 1
         let newCheckoutItem = CheckoutItem(item: item, units: 1)
-        checkoutItems.updateValue(newCheckoutItem, forKey: item.name)
+        checkoutItems.append(newCheckoutItem)
+        
         // Hide add button
         cell.addButton.isHidden = true
+        
         // Set quantity label and show quantityControlView
         cell.quantityLabel.text = String(newCheckoutItem.getUnits())
         cell.quantityControlView.isHidden = false
@@ -201,12 +216,15 @@ extension HomeViewController: UITableViewDelegate {
         
         let category = Category.allCases[indexPath.section]
         let supermarketItem = supermarketItems[category]![indexPath.row]
-        guard let checkoutItem = checkoutItems[supermarketItem.name]  else {
+        
+        guard let itemIndex = getCheckoutItemIndex(name: supermarketItem.name)  else {
             fatalError("There should be a checkout item for \(supermarketItem.name)")
         }
         guard let cell = itemsTableView.cellForRow(at: indexPath) as? ItemTableViewCell else {
             fatalError("The cell is not ItemTableViewCell type")
         }
+        
+        let checkoutItem = checkoutItems[itemIndex]
         
         // Check if we are going to reach the maximum quantity
         if checkoutItem.getUnits() == (checkoutItem.getMax()-1) {
@@ -216,7 +234,7 @@ extension HomeViewController: UITableViewDelegate {
         
         // Increase the checkoutItem quantity
         checkoutItem.setUnits(units: checkoutItem.getUnits()+1)
-        checkoutItems.updateValue(checkoutItem, forKey: supermarketItem.name)
+        checkoutItems[itemIndex] = checkoutItem
         // Update the quantity label
         cell.quantityLabel.text = String(checkoutItem.getUnits())
     }
@@ -225,12 +243,15 @@ extension HomeViewController: UITableViewDelegate {
         
         let category = Category.allCases[indexPath.section]
         let supermarketItem = supermarketItems[category]![indexPath.row]
-        guard let checkoutItem = checkoutItems[supermarketItem.name]  else {
+        
+        guard let itemIndex = getCheckoutItemIndex(name: supermarketItem.name)  else {
             fatalError("There should be a checkout item for \(supermarketItem.name)")
         }
         guard let cell = itemsTableView.cellForRow(at: indexPath) as? ItemTableViewCell else {
             fatalError("The cell is not ItemTableViewCell type")
         }
+        
+        let checkoutItem = checkoutItems[itemIndex]
         
         // If the current quantity equals max, enable plus button again
         if checkoutItem.getUnits() == checkoutItem.getMax() {
@@ -240,8 +261,7 @@ extension HomeViewController: UITableViewDelegate {
         // If the current quantity is 1
         if checkoutItem.getUnits() == 1 {
             // Remove from checkoutItems
-            checkoutItems.removeValue(forKey: supermarketItem.name)
-            print(checkoutItems)
+            checkoutItems.remove(at: itemIndex)
             // Show add button
             cell.addButton.isHidden = false
             // Hide quantityControlView
@@ -249,7 +269,7 @@ extension HomeViewController: UITableViewDelegate {
         } else {
             // Decrease checkoutItem quantity
             checkoutItem.setUnits(units: checkoutItem.getUnits()-1)
-            checkoutItems.updateValue(checkoutItem, forKey: supermarketItem.name)
+            checkoutItems[itemIndex] = checkoutItem
             // Update the quantity label
             cell.quantityLabel.text = String(checkoutItem.getUnits())
         }
