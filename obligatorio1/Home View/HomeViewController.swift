@@ -14,31 +14,23 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var bannerCollectionView: UICollectionView!
     @IBOutlet weak var itemsTableView: UITableView!
     @IBOutlet weak var scrollBanner: UIPageControl!
+    @IBOutlet weak var cartNavigationButton: UIBarButtonItem!
     
-    private var supermarketItems: [Category:[SupermarketItem]] = [:]
-    private var bannerItems: [BannerItem] = []
-    private var checkoutItems: [CheckoutItem] = []
+    var dataManager = DataManager.sharedInstance
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        supermarketItems = DataManager.sharedInstance.getSupermarketItems()
-        bannerItems = DataManager.sharedInstance.getBannerItems()
-
         bannerCollectionView.dataSource = self
         bannerCollectionView.delegate = self
         itemsTableView.dataSource = self
         itemsTableView.dataSource = self
         
         // Configuring the scroll banner
-        scrollBanner.numberOfPages = bannerItems.count
+        scrollBanner.numberOfPages = dataManager.getBannerItems().count
         scrollBanner.currentPage = 0
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let checkoutViewController = segue.destination as? CheckoutViewController {
-            checkoutViewController.checkoutItems = self.checkoutItems
-        }
+        
+        configCartNavigationButton()
     }
     
     // Function to get the indexPath of the buttons in a cell of a tableView
@@ -54,18 +46,14 @@ class HomeViewController: UIViewController {
         return nil
     }
     
-    private func getCheckoutItemIndex(name: String) -> Int? {
-        var index = 0
-        while index < checkoutItems.count {
-            if checkoutItems[index].item.name == name {
-                return index
-            } else {
-                index += 1
-            }
+    private func configCartNavigationButton() {
+        if dataManager.checkoutItemsIsEmpty() {
+            cartNavigationButton.isEnabled = false
+        } else {
+            cartNavigationButton.isEnabled = true
         }
-        
-        return nil
     }
+    
     
     @IBAction func addButtonClick(_ sender: Any) {
         if let indexPath = getIndexPath(of: sender, tableView: itemsTableView) {
@@ -95,7 +83,7 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return bannerItems.count
+        return dataManager.getBannerItems().count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -103,7 +91,7 @@ extension HomeViewController: UICollectionViewDataSource {
             fatalError("The dequeued cell is not an instance of SectionCollectionViewCell")
         }
         
-        let banner = bannerItems[indexPath.row]
+        let banner = dataManager.getBannerItem(index: indexPath.row)
         cell.bannerImageView.image = UIImage(named: banner.image)
         cell.bannerImageView.layer.cornerRadius = 5
         cell.nameLabel.text = banner.name
@@ -131,19 +119,18 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 extension HomeViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return supermarketItems.count
+        return dataManager.getSupermarketItems().count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return Category.allCases[section].rawValue
+        return dataManager.getCategory(index: section).rawValue
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let category = Category.allCases[section]
-        guard let itemsCategory = supermarketItems[category] else {
+        let category = dataManager.getCategory(index: section)
+        guard let itemsCategory = dataManager.getSupermarketItems()[category] else {
             return 0
         }
-        
         return itemsCategory.count
     }
     
@@ -152,8 +139,9 @@ extension HomeViewController: UITableViewDataSource {
             fatalError("The dequeued cell is not an instance of ItemTableViewCell")
         }
         
-        let category = Category.allCases[indexPath.section]
-        let item = supermarketItems[category]![indexPath.row]
+        let category = dataManager.getCategory(index: indexPath.section)
+        let item = dataManager.getSupermarketItem(category: category, index: indexPath.row)
+        let checkoutItemIndex = dataManager.getCheckoutItemIndex(name: item.name)
         
         // Formatting the image, name and price
         cell.itemImageView.image = UIImage(named: item.imageLogo)
@@ -162,14 +150,23 @@ extension HomeViewController: UITableViewDataSource {
         cell.priceLabel.text = item.getPriceString()
         
         // Formatting the addButton, and quantityControllerView
-        cell.addButton.isHidden = false
+        
         cell.addButton.layer.cornerRadius = 20
         cell.addButton.layer.borderColor = UIColor.blue.cgColor
         cell.addButton.layer.borderWidth = 1
-        cell.quantityControlView.isHidden = true
         cell.quantityControlView.layer.cornerRadius = 20
         cell.quantityControlView.layer.borderColor = UIColor.lightGray.cgColor
         cell.quantityControlView.layer.borderWidth = 1
+        
+        if checkoutItemIndex != nil {
+            cell.addButton.isHidden = true
+            cell.quantityLabel.text = String(dataManager.getCheckoutItem(index: checkoutItemIndex!).getUnits())
+            cell.quantityControlView.isHidden = false
+        } else {
+            cell.addButton.isHidden = false
+            cell.quantityLabel.text = "0"
+            cell.quantityControlView.isHidden = true
+        }
         
         // Formating the cell
         // setting selection style to none so the cell doesn't turn gray or blue when touching it
@@ -184,15 +181,15 @@ extension HomeViewController: UITableViewDelegate {
     
     private func onAddButtonClick(indexPath: IndexPath) {
         
-        let category = Category.allCases[indexPath.section]
-        let item = supermarketItems[category]![indexPath.row]
+        let category = dataManager.getCategory(index: indexPath.section)
+        let item = dataManager.getSupermarketItem(category: category, index: indexPath.row)
         guard let cell = itemsTableView.cellForRow(at: indexPath) as? ItemTableViewCell else {
             fatalError("The cell is not ItemTableViewCell type")
         }
         
         // Add item to cart with quantity in 1
         let newCheckoutItem = CheckoutItem(item: item, units: 1)
-        checkoutItems.append(newCheckoutItem)
+        dataManager.addCheckoutItem(newItem: newCheckoutItem)
         
         // Hide add button
         cell.addButton.isHidden = true
@@ -201,21 +198,24 @@ extension HomeViewController: UITableViewDelegate {
         cell.quantityLabel.text = String(newCheckoutItem.getUnits())
         cell.quantityControlView.isHidden = false
         
+        // Config the cartNavigationButton in case it was disabled
+        configCartNavigationButton()
+        
     }
     
     private func onPlusButtonClick(indexPath: IndexPath) {
         
-        let category = Category.allCases[indexPath.section]
-        let supermarketItem = supermarketItems[category]![indexPath.row]
+        let category = dataManager.getCategory(index: indexPath.section)
+        let supermarketItem = dataManager.getSupermarketItem(category: category, index: indexPath.row)
         
-        guard let itemIndex = getCheckoutItemIndex(name: supermarketItem.name)  else {
+        guard let itemIndex = dataManager.getCheckoutItemIndex(name: supermarketItem.name)  else {
             fatalError("There should be a checkout item for \(supermarketItem.name)")
         }
         guard let cell = itemsTableView.cellForRow(at: indexPath) as? ItemTableViewCell else {
             fatalError("The cell is not ItemTableViewCell type")
         }
         
-        let checkoutItem = checkoutItems[itemIndex]
+        let checkoutItem = dataManager.getCheckoutItem(index: itemIndex)
         
         // Check if we are going to reach the maximum quantity
         if checkoutItem.getUnits() == (checkoutItem.getMax()-1) {
@@ -225,24 +225,24 @@ extension HomeViewController: UITableViewDelegate {
         
         // Increase the checkoutItem quantity
         checkoutItem.setUnits(units: checkoutItem.getUnits()+1)
-        checkoutItems[itemIndex] = checkoutItem
+        dataManager.updateCheckoutItems(index: itemIndex, item: checkoutItem)
         // Update the quantity label
         cell.quantityLabel.text = String(checkoutItem.getUnits())
     }
     
     private func onMinusButtonClick(indexPath: IndexPath) {
         
-        let category = Category.allCases[indexPath.section]
-        let supermarketItem = supermarketItems[category]![indexPath.row]
+        let category = dataManager.getCategory(index: indexPath.section)
+        let supermarketItem = dataManager.getSupermarketItem(category: category, index: indexPath.row)
         
-        guard let itemIndex = getCheckoutItemIndex(name: supermarketItem.name)  else {
+        guard let itemIndex = dataManager.getCheckoutItemIndex(name: supermarketItem.name)  else {
             fatalError("There should be a checkout item for \(supermarketItem.name)")
         }
         guard let cell = itemsTableView.cellForRow(at: indexPath) as? ItemTableViewCell else {
             fatalError("The cell is not ItemTableViewCell type")
         }
         
-        let checkoutItem = checkoutItems[itemIndex]
+        let checkoutItem = dataManager.getCheckoutItem(index: itemIndex)
         
         // If the current quantity equals max, enable plus button again
         if checkoutItem.getUnits() == checkoutItem.getMax() {
@@ -252,7 +252,7 @@ extension HomeViewController: UITableViewDelegate {
         // If the current quantity is 1
         if checkoutItem.getUnits() == 1 {
             // Remove from checkoutItems
-            checkoutItems.remove(at: itemIndex)
+            dataManager.removeCheckoutItem(index: itemIndex)
             // Show add button
             cell.addButton.isHidden = false
             // Hide quantityControlView
@@ -260,10 +260,13 @@ extension HomeViewController: UITableViewDelegate {
         } else {
             // Decrease checkoutItem quantity
             checkoutItem.setUnits(units: checkoutItem.getUnits()-1)
-            checkoutItems[itemIndex] = checkoutItem
+            dataManager.updateCheckoutItems(index: itemIndex, item: checkoutItem)
             // Update the quantity label
             cell.quantityLabel.text = String(checkoutItem.getUnits())
         }
+        
+        // Config the cartNavigationButton in case the checkoutItems became empty
+        configCartNavigationButton()
     }
     
 }

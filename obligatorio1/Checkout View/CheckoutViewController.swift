@@ -15,7 +15,7 @@ class CheckoutViewController: UIViewController {
     @IBOutlet weak var checkoutButton: UIButton!
     @IBOutlet weak var finalPriceLabel: UILabel!
     
-    var checkoutItems: [CheckoutItem] = []
+    private var dataManager = DataManager.sharedInstance
     private var totalPrice: Int = 0
     
     
@@ -35,7 +35,7 @@ class CheckoutViewController: UIViewController {
     
     private func calculateTotalPrice() -> Int {
         var totalPrice = 0
-        for checkoutItem in checkoutItems {
+        for checkoutItem in dataManager.getCheckoutItems() {
             totalPrice += checkoutItem.getUnits() * checkoutItem.item.price
         }
         return totalPrice
@@ -46,7 +46,7 @@ class CheckoutViewController: UIViewController {
 
 extension CheckoutViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return checkoutItems.count
+        return dataManager.getCheckoutItems().count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -55,7 +55,7 @@ extension CheckoutViewController: UICollectionViewDataSource {
             fatalError("The dequeued cell is not an instance of CartCollectionViewCell")
         }
         
-        let checkoutItem = checkoutItems[indexPath.row]
+        let checkoutItem = dataManager.getCheckoutItem(index: indexPath.row)
         let supermarketItem = checkoutItem.item
         
         cell.cartItemImage.image = UIImage(named: supermarketItem.imageItem)

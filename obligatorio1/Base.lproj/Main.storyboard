@@ -240,6 +240,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="bannerCollectionView" destination="yEs-ta-sW3" id="P3b-AM-wng"/>
+                        <outlet property="cartNavigationButton" destination="U4j-5V-Ff3" id="p06-Hq-35A"/>
                         <outlet property="itemsTableView" destination="d0b-IS-Le9" id="k5I-BP-8se"/>
                         <outlet property="scrollBanner" destination="i4F-bB-N5d" id="OEf-JJ-z39"/>
                         <segue destination="GYx-xl-kIz" kind="show" identifier="toCheckoutViewController" id="2ft-t3-GF3"/>
@@ -373,9 +374,6 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="te5-Ap-Xhe"/>
                     </view>
-                    <navigationItem key="navigationItem" id="kLI-2W-790">
-                        <barButtonItem key="leftBarButtonItem" title="Item" image="icon-back" id="Vac-aG-U4E"/>
-                    </navigationItem>
                     <connections>
                         <outlet property="cartCollectionView" destination="1NI-eS-YOO" id="3Bf-7o-28c"/>
                         <outlet property="checkoutButton" destination="avO-yU-CDD" id="mfV-Kq-70A"/>
@@ -388,7 +386,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="icon-back" width="18" height="16"/>
         <image name="icon-cart" width="24" height="21"/>
         <image name="icon-minus" width="8" height="3"/>
         <image name="icon-plus" width="12" height="12"/>
