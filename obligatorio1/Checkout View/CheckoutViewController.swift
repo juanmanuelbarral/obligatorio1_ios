@@ -15,8 +15,8 @@ class CheckoutViewController: UIViewController {
     @IBOutlet weak var checkoutButton: UIButton!
     @IBOutlet weak var finalPriceLabel: UILabel!
     
-    var checkoutItems: [String:CheckoutItem] = [:]
-    private var finalPrice: Int = 0
+    var checkoutItems: [CheckoutItem] = []
+    private var totalPrice: Int = 0
     
     
     override func viewDidLoad() {
@@ -27,6 +27,18 @@ class CheckoutViewController: UIViewController {
         
         // Checkout button style
         checkoutButton.layer.cornerRadius = checkoutButton.frame.size.height/2
+        
+        // Call function to calculate total price
+        totalPrice = calculateTotalPrice()
+        finalPriceLabel.text = "$\(totalPrice)"
+    }
+    
+    private func calculateTotalPrice() -> Int {
+        var totalPrice = 0
+        for checkoutItem in checkoutItems {
+            totalPrice += checkoutItem.getUnits() * checkoutItem.item.price
+        }
+        return totalPrice
     }
     
 
@@ -34,17 +46,36 @@ class CheckoutViewController: UIViewController {
 
 extension CheckoutViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // TODO
-        return 0
+        return checkoutItems.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        // TODO
-        return UICollectionViewCell()
+        
+        guard let cell = cartCollectionView.dequeueReusableCell(withReuseIdentifier: "cartCollectionCell", for: indexPath) as? CartCollectionViewCell else {
+            fatalError("The dequeued cell is not an instance of CartCollectionViewCell")
+        }
+        
+        let checkoutItem = checkoutItems[indexPath.row]
+        let supermarketItem = checkoutItem.item
+        
+        cell.cartItemImage.image = UIImage(named: supermarketItem.imageItem)
+        cell.cartItemImage.layer.cornerRadius = 5
+        cell.nameLabel.text = supermarketItem.name
+        cell.priceLabel.text = supermarketItem.getPriceString()
+        cell.unitsLabel.text = "\(checkoutItem.getUnits()) units"
+
+        return cell
     }
     
 }
 
-extension CheckoutViewController: UICollectionViewDelegate {
+extension CheckoutViewController: UICollectionViewDelegateFlowLayout {
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cartCollectionViewSize = cartCollectionView.frame.size
+        // Half the width of the collectionView (so only two show per row)
+        let width = cartCollectionViewSize.width * 0.45
+        let height = width + 80
+        return CGSize(width: width, height: height)
+    }
 }
