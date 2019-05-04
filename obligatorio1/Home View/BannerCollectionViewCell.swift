@@ -15,5 +15,10 @@ class BannerCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var bannerTextLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     
+    func configCell(banner: BannerItem) {
+        bannerImageView.image = UIImage(named: banner.image)
+        bannerImageView.layer.cornerRadius = 5
+        nameLabel.text = banner.name
+    }
     
 }

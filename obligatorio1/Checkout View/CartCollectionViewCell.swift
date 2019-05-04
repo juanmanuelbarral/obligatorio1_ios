@@ -15,4 +15,12 @@ class CartCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var unitsLabel: UILabel!
+    
+    func configCell(checkoutItem: CheckoutItem) {
+        cartItemImage.image = UIImage(named: checkoutItem.item.imageItem)
+        cartItemImage.layer.cornerRadius = 5
+        nameLabel.text = checkoutItem.item.name
+        priceLabel.text = checkoutItem.item.getPriceString()
+        unitsLabel.text = "\(checkoutItem.getUnits()) units"
+    }
 }

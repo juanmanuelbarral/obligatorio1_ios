@@ -34,5 +34,35 @@ class ItemTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-
+    func configCell(item: SupermarketItem, units: Int) {
+        // Formatting the image, name and price
+        itemImageView.image = UIImage(named: item.imageLogo)
+        itemImageView.layer.cornerRadius = itemImageView.frame.size.width/2
+        nameLabel.text = item.name
+        priceLabel.text = item.getPriceString()
+        
+        
+        // Formatting the addButton, and quantityControllerView
+        addButton.layer.cornerRadius = 20
+        addButton.layer.borderColor = UIColor.blue.cgColor
+        addButton.layer.borderWidth = 1
+        quantityControlView.layer.cornerRadius = 20
+        quantityControlView.layer.borderColor = UIColor.lightGray.cgColor
+        quantityControlView.layer.borderWidth = 1
+        
+        if units > 0 {
+            addButton.isHidden = true
+            quantityLabel.text = String(units)
+            quantityControlView.isHidden = false
+        } else {
+            addButton.isHidden = false
+            quantityLabel.text = String(units)
+            quantityControlView.isHidden = true
+        }
+        
+        // Formating the cell
+        // setting selection style to none so the cell doesn't turn gray or blue when touching it
+        self.selectionStyle = UITableViewCell.SelectionStyle.none
+    }
+    
 }
