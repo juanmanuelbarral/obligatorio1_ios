@@ -30,7 +30,7 @@ class HomeViewController: UIViewController {
         scrollBanner.numberOfPages = dataManager.getBannerItems().count
         scrollBanner.currentPage = 0
         
-        configCartNavigationButton()
+        updateStateCartNavigationButton()
     }
     
     // Function to get the indexPath of the buttons in a cell of a tableView
@@ -46,7 +46,7 @@ class HomeViewController: UIViewController {
         return nil
     }
     
-    private func configCartNavigationButton() {
+    private func updateStateCartNavigationButton() {
         if dataManager.checkoutItemsIsEmpty() {
             cartNavigationButton.isEnabled = false
         } else {
@@ -92,9 +92,8 @@ extension HomeViewController: UICollectionViewDataSource {
         }
         
         let banner = dataManager.getBannerItem(index: indexPath.row)
-        cell.bannerImageView.image = UIImage(named: banner.image)
-        cell.bannerImageView.layer.cornerRadius = 5
-        cell.nameLabel.text = banner.name
+        cell.configCell(banner: banner)
+        
         return cell
     }
     
@@ -135,6 +134,7 @@ extension HomeViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         guard let cell = itemsTableView.dequeueReusableCell(withIdentifier: "itemTableCell", for: indexPath) as? ItemTableViewCell else {
             fatalError("The dequeued cell is not an instance of ItemTableViewCell")
         }
@@ -142,35 +142,13 @@ extension HomeViewController: UITableViewDataSource {
         let category = dataManager.getCategory(index: indexPath.section)
         let item = dataManager.getSupermarketItem(category: category, index: indexPath.row)
         let checkoutItemIndex = dataManager.getCheckoutItemIndex(name: item.name)
-        
-        // Formatting the image, name and price
-        cell.itemImageView.image = UIImage(named: item.imageLogo)
-        cell.itemImageView.layer.cornerRadius = cell.itemImageView.frame.size.width/2
-        cell.nameLabel.text = item.name
-        cell.priceLabel.text = item.getPriceString()
-        
-        // Formatting the addButton, and quantityControllerView
-        
-        cell.addButton.layer.cornerRadius = 20
-        cell.addButton.layer.borderColor = UIColor.blue.cgColor
-        cell.addButton.layer.borderWidth = 1
-        cell.quantityControlView.layer.cornerRadius = 20
-        cell.quantityControlView.layer.borderColor = UIColor.lightGray.cgColor
-        cell.quantityControlView.layer.borderWidth = 1
+        var units = 0
         
         if checkoutItemIndex != nil {
-            cell.addButton.isHidden = true
-            cell.quantityLabel.text = String(dataManager.getCheckoutItem(index: checkoutItemIndex!).getUnits())
-            cell.quantityControlView.isHidden = false
-        } else {
-            cell.addButton.isHidden = false
-            cell.quantityLabel.text = "0"
-            cell.quantityControlView.isHidden = true
+            units = dataManager.getCheckoutItem(index: checkoutItemIndex!).getUnits()
         }
         
-        // Formating the cell
-        // setting selection style to none so the cell doesn't turn gray or blue when touching it
-        cell.selectionStyle = UITableViewCell.SelectionStyle.none
+        cell.configCell(item: item, units: units)
         
         return cell
     }
@@ -199,7 +177,7 @@ extension HomeViewController: UITableViewDelegate {
         cell.quantityControlView.isHidden = false
         
         // Config the cartNavigationButton in case it was disabled
-        configCartNavigationButton()
+        updateStateCartNavigationButton()
         
     }
     
@@ -266,7 +244,7 @@ extension HomeViewController: UITableViewDelegate {
         }
         
         // Config the cartNavigationButton in case the checkoutItems became empty
-        configCartNavigationButton()
+        updateStateCartNavigationButton()
     }
     
 }

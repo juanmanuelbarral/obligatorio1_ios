@@ -25,8 +25,16 @@ class CheckoutViewController: UIViewController {
         cartCollectionView.dataSource = self
         cartCollectionView.delegate = self
         
-        // Checkout button style
+        // Large title
+        self.title = "Shopping cart"
+        if #available(iOS 11.0, *) {
+            self.navigationController?.navigationBar.prefersLargeTitles = true
+        }
+        self.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
+        
+        // Checkout button style and state
         checkoutButton.layer.cornerRadius = checkoutButton.frame.size.height/2
+        updateStateCheckoutButton()
         
         // Call function to calculate total price
         totalPrice = calculateTotalPrice()
@@ -39,6 +47,14 @@ class CheckoutViewController: UIViewController {
             totalPrice += checkoutItem.getUnits() * checkoutItem.item.price
         }
         return totalPrice
+    }
+    
+    private func updateStateCheckoutButton() {
+        if dataManager.checkoutItemsIsEmpty() {
+            checkoutButton.isEnabled = false
+        } else {
+            checkoutButton.isEnabled = true
+        }
     }
     
 
@@ -56,14 +72,8 @@ extension CheckoutViewController: UICollectionViewDataSource {
         }
         
         let checkoutItem = dataManager.getCheckoutItem(index: indexPath.row)
-        let supermarketItem = checkoutItem.item
+        cell.configCell(checkoutItem: checkoutItem)
         
-        cell.cartItemImage.image = UIImage(named: supermarketItem.imageItem)
-        cell.cartItemImage.layer.cornerRadius = 5
-        cell.nameLabel.text = supermarketItem.name
-        cell.priceLabel.text = supermarketItem.getPriceString()
-        cell.unitsLabel.text = "\(checkoutItem.getUnits()) units"
-
         return cell
     }
     
