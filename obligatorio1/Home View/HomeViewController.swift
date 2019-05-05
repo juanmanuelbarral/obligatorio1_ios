@@ -37,6 +37,18 @@ class HomeViewController: UIViewController {
         updateStateCartNavigationButton()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        // No large title
+        self.title = ""
+        if #available(iOS 11.0, *) {
+            self.navigationController?.navigationBar.prefersLargeTitles = false
+        }
+        self.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
+        
+        // Reload tableView
+        itemsTableView.reloadData()
+    }
+    
     // Function to get the indexPath of the buttons in a cell of a tableView
     private func getIndexPath(of element: Any, tableView: UITableView) -> IndexPath?
     {

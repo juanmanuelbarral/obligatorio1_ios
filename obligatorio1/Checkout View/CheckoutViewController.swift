@@ -25,13 +25,6 @@ class CheckoutViewController: UIViewController {
         cartCollectionView.dataSource = self
         cartCollectionView.delegate = self
         
-        // Large title
-        self.title = "Shopping cart"
-        if #available(iOS 11.0, *) {
-            self.navigationController?.navigationBar.prefersLargeTitles = true
-        }
-        self.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
-        
         // Checkout button style and state
         checkoutButton.layer.cornerRadius = checkoutButton.frame.size.height/2
         updateStateCheckoutButton()
@@ -39,6 +32,15 @@ class CheckoutViewController: UIViewController {
         // Call function to calculate total price
         totalPrice = calculateTotalPrice()
         finalPriceLabel.text = "$\(totalPrice)"
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        // Large title
+        self.title = "Shopping cart"
+        if #available(iOS 11.0, *) {
+            self.navigationController?.navigationBar.prefersLargeTitles = true
+        }
+        self.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
     }
     
     private func calculateTotalPrice() -> Int {
@@ -57,7 +59,21 @@ class CheckoutViewController: UIViewController {
         }
     }
     
-
+    @IBAction func checkoutButtonClick(_ sender: Any) {
+        // Show alert that the transaction was succesful
+        let alertController = UIAlertController(title: "Success!", message: "The transaction was successful", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
+            // Empty the checkoutItems
+            self.dataManager.clearCheckoutItems()
+            
+            // Remove self from the navigation stack
+            self.navigationController?.viewControllers.removeLast()
+        }
+        
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
 }
 
 extension CheckoutViewController: UICollectionViewDataSource {
