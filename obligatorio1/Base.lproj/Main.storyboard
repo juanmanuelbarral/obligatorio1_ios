@@ -251,6 +251,7 @@
                         <outlet property="cartNavigationButton" destination="U4j-5V-Ff3" id="p06-Hq-35A"/>
                         <outlet property="itemsTableView" destination="d0b-IS-Le9" id="k5I-BP-8se"/>
                         <outlet property="scrollBanner" destination="i4F-bB-N5d" id="OEf-JJ-z39"/>
+                        <outlet property="searchBar" destination="sdG-jO-6CA" id="7od-Od-XPa"/>
                         <segue destination="GYx-xl-kIz" kind="show" identifier="toCheckoutViewController" id="2ft-t3-GF3"/>
                     </connections>
                 </viewController>

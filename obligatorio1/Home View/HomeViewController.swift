@@ -15,8 +15,11 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var itemsTableView: UITableView!
     @IBOutlet weak var scrollBanner: UIPageControl!
     @IBOutlet weak var cartNavigationButton: UIBarButtonItem!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var dataManager = DataManager.sharedInstance
+    var filteredSupermarketItems: [Category:[SupermarketItem]] = [:]
+    var searchIsActive = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +28,7 @@ class HomeViewController: UIViewController {
         bannerCollectionView.delegate = self
         itemsTableView.dataSource = self
         itemsTableView.dataSource = self
+        searchBar.delegate = self
         
         // Configuring the scroll banner
         scrollBanner.numberOfPages = dataManager.getBannerItems().count
@@ -80,6 +84,7 @@ class HomeViewController: UIViewController {
     
 }
 
+
 extension HomeViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -127,10 +132,21 @@ extension HomeViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let category = dataManager.getCategory(index: section)
-        guard let itemsCategory = dataManager.getSupermarketItems()[category] else {
+        
+        // Use all of the items or the filtered items
+        var items: [Category: [SupermarketItem]]
+        if searchIsActive {
+            // Use the filtered items
+            items = filteredSupermarketItems
+        } else {
+            // Use all of the items
+            items = dataManager.getSupermarketItems()
+        }
+        
+        guard let itemsInCategory = items[category] else {
             return 0
         }
-        return itemsCategory.count
+        return itemsInCategory.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -139,15 +155,25 @@ extension HomeViewController: UITableViewDataSource {
             fatalError("The dequeued cell is not an instance of ItemTableViewCell")
         }
         
+        // Obtain the item to config the cell
         let category = dataManager.getCategory(index: indexPath.section)
-        let item = dataManager.getSupermarketItem(category: category, index: indexPath.row)
+        var item: SupermarketItem
+        if searchIsActive {
+            // Use the filtered items
+            item = filteredSupermarketItems[category]![indexPath.row]
+        } else {
+            // Use all of the items
+            item = dataManager.getSupermarketItem(category: category, index: indexPath.row)
+        }
+        
+        // Check it that item has units in the cart
         let checkoutItemIndex = dataManager.getCheckoutItemIndex(name: item.name)
         var units = 0
-        
         if checkoutItemIndex != nil {
             units = dataManager.getCheckoutItem(index: checkoutItemIndex!).getUnits()
         }
         
+        // Config the cell
         cell.configCell(item: item, units: units)
         
         return cell
@@ -158,7 +184,6 @@ extension HomeViewController: UITableViewDataSource {
 extension HomeViewController: UITableViewDelegate {
     
     private func onAddButtonClick(indexPath: IndexPath) {
-        
         let category = dataManager.getCategory(index: indexPath.section)
         let item = dataManager.getSupermarketItem(category: category, index: indexPath.row)
         guard let cell = itemsTableView.cellForRow(at: indexPath) as? ItemTableViewCell else {
@@ -182,7 +207,6 @@ extension HomeViewController: UITableViewDelegate {
     }
     
     private func onPlusButtonClick(indexPath: IndexPath) {
-        
         let category = dataManager.getCategory(index: indexPath.section)
         let supermarketItem = dataManager.getSupermarketItem(category: category, index: indexPath.row)
         
@@ -209,7 +233,6 @@ extension HomeViewController: UITableViewDelegate {
     }
     
     private func onMinusButtonClick(indexPath: IndexPath) {
-        
         let category = dataManager.getCategory(index: indexPath.section)
         let supermarketItem = dataManager.getSupermarketItem(category: category, index: indexPath.row)
         
@@ -247,4 +270,51 @@ extension HomeViewController: UITableViewDelegate {
         updateStateCartNavigationButton()
     }
     
+}
+
+
+extension HomeViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        // Check if there is text in the search bar to filter items
+        if searchText == "" {
+            searchIsActive = false
+        } else {
+            searchIsActive = true
+        }
+        
+        // If the search is active then filter the items
+        if searchIsActive {
+            let allItems = dataManager.getSupermarketItems()
+            filteredSupermarketItems = allItems.mapValues {
+                // Apply a mapping function over the values of the dictionary
+                (items) in (items.filter {
+                    // Filter those results that match with the given conditions
+                    // given conditions for the project: filters by name and category
+                    (item) in checkItemForMatch(item: item, text: searchText)
+                })
+            }
+        }
+        
+        // Reload tableView
+        itemsTableView.reloadData()
+    }
+    
+    
+    /// Function that checks if a SupermarketItem matches a text input from the search bar.
+    /// Criteria: contained on the name or category
+    ///
+    /// - Parameters:
+    ///   - item: supermarket item to check against
+    ///   - text: input from the search bar
+    /// - Returns: boolean value wether it matches or no
+    private func checkItemForMatch(item: SupermarketItem, text: String) -> Bool {
+        if item.name.lowercased().contains(text.lowercased()) {
+            return true
+        } else if item.category.rawValue.lowercased().contains(text.lowercased()) {
+            return true
+        } else {
+            return false
+        }
+    }
 }
