@@ -345,4 +345,8 @@ extension HomeViewController: UISearchBarDelegate {
             return false
         }
     }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+    }
 }
