@@ -16,7 +16,9 @@ class CheckoutViewController: UIViewController {
     @IBOutlet weak var finalPriceLabel: UILabel!
     
     private var dataManager = DataManager.sharedInstance
-    private var totalPrice: Int = 0
+    private var pickerChoices: [Int] = [Int](0...10)
+    private var selectedOptionPicker = 0
+    private var pickerView = UIPickerView(frame: CGRect(x: 5, y: 20, width: 250, height: 140))
     
     
     override func viewDidLoad() {
@@ -24,14 +26,15 @@ class CheckoutViewController: UIViewController {
 
         cartCollectionView.dataSource = self
         cartCollectionView.delegate = self
+        pickerView.dataSource = self
+        pickerView.delegate = self
         
         // Checkout button style and state
         checkoutButton.layer.cornerRadius = checkoutButton.frame.size.height/2
         updateStateCheckoutButton()
         
-        // Call function to calculate total price
-        totalPrice = calculateTotalPrice()
-        finalPriceLabel.text = "$\(totalPrice)"
+        // Call function to update total price
+        updateTotalPrice()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,11 +54,17 @@ class CheckoutViewController: UIViewController {
         return totalPrice
     }
     
+    private func updateTotalPrice() {
+        finalPriceLabel.text = "$\(calculateTotalPrice())"
+    }
+    
     private func updateStateCheckoutButton() {
         if dataManager.checkoutItemsIsEmpty() {
             checkoutButton.isEnabled = false
+            checkoutButton.layer.backgroundColor = UIColor.lightGray.cgColor
         } else {
             checkoutButton.isEnabled = true
+            checkoutButton.layer.backgroundColor = UIColor.blue.cgColor
         }
     }
     
@@ -103,5 +112,51 @@ extension CheckoutViewController: UICollectionViewDelegateFlowLayout {
         let width = cartCollectionViewSize.width * 0.45
         let height = width + 80
         return CGSize(width: width, height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // Alert with picker
+        let alertController = UIAlertController(title: "Change the units", message: "\n\n\n\n\n\n", preferredStyle: .alert)
+        alertController.view.addSubview(pickerView)
+        
+        let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
+            // Change the units for the checkoutItem to the selected option or remove if cero
+            if self.selectedOptionPicker != 0 {
+                let changedItem = self.dataManager.getCheckoutItems()[indexPath.row]
+                changedItem.setUnits(units: self.selectedOptionPicker)
+                self.dataManager.updateCheckoutItems(index: indexPath.row, item: changedItem)
+            } else {
+                self.dataManager.removeCheckoutItem(index: indexPath.row)
+            }
+            
+            // Reload the collectionView and calculate the total
+            self.cartCollectionView.reloadData()
+            self.updateTotalPrice()
+            
+            // Check for the checkout button
+            self.updateStateCheckoutButton()
+        }
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+}
+
+extension CheckoutViewController: UIPickerViewDataSource, UIPickerViewDelegate {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerChoices.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return String(pickerChoices[row])
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        selectedOptionPicker = pickerChoices[row]
     }
 }
