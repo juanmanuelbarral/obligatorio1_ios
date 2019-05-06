@@ -16,6 +16,9 @@ class CartCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var unitsLabel: UILabel!
     
+    /// Function that configures the cell with its needed information
+    ///
+    /// - Parameter checkoutItem: checkoutItem to be reflected on the cell
     func configCell(checkoutItem: CheckoutItem) {
         cartItemImage.image = UIImage(named: checkoutItem.item.imageItem)
         cartItemImage.layer.cornerRadius = 5

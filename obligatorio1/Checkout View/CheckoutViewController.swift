@@ -46,6 +46,9 @@ class CheckoutViewController: UIViewController {
         self.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
     }
     
+    /// Calculates the price of all the items in the cart
+    ///
+    /// - Returns: total price as an Int
     private func calculateTotalPrice() -> Int {
         var totalPrice = 0
         for checkoutItem in dataManager.getCheckoutItems() {
@@ -54,10 +57,12 @@ class CheckoutViewController: UIViewController {
         return totalPrice
     }
     
+    /// Updates the total price label on the view
     private func updateTotalPrice() {
         finalPriceLabel.text = "$\(calculateTotalPrice())"
     }
     
+    /// Updates the checkout button appearance and state whether it should be enabled or not
     private func updateStateCheckoutButton() {
         if dataManager.checkoutItemsIsEmpty() {
             checkoutButton.isEnabled = false

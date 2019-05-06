@@ -34,6 +34,11 @@ class ItemTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    /// Function that configures the cell with its needed information
+    ///
+    /// - Parameters:
+    ///   - item: item to be reflected on the cell
+    ///   - units: units of that item on the cart
     func configCell(item: SupermarketItem, units: Int) {
         // Formatting the image, name and price
         itemImageView.image = UIImage(named: item.imageLogo)

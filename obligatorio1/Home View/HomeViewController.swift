@@ -49,7 +49,12 @@ class HomeViewController: UIViewController {
         itemsTableView.reloadData()
     }
     
-    // Function to get the indexPath of the buttons in a cell of a tableView
+    /// Function to get the indexPath of the buttons in a cell of a tableView
+    ///
+    /// - Parameters:
+    ///   - element: element selected
+    ///   - tableView: tableView where the element is
+    /// - Returns: the IndexPath of said element in the tableView
     private func getIndexPath(of element: Any, tableView: UITableView) -> IndexPath?
     {
         if let view =  element as? UIView
@@ -62,6 +67,8 @@ class HomeViewController: UIViewController {
         return nil
     }
     
+    
+    /// Function that checks if the cart navigation button should be enabled or not
     private func updateStateCartNavigationButton() {
         if dataManager.checkoutItemsIsEmpty() {
             cartNavigationButton.isEnabled = false
@@ -195,6 +202,9 @@ extension HomeViewController: UITableViewDataSource {
 
 extension HomeViewController: UITableViewDelegate {
     
+    /// Function performed when the user taps on the add button of the tableView cells
+    ///
+    /// - Parameter indexPath: indexPath from the cell where the button belongs
     private func onAddButtonClick(indexPath: IndexPath) {
         let category = dataManager.getCategory(index: indexPath.section)
         let item = dataManager.getSupermarketItem(category: category, index: indexPath.row)
@@ -218,6 +228,9 @@ extension HomeViewController: UITableViewDelegate {
         
     }
     
+    /// Function performed when the user taps on the plus button of the tableView cells
+    ///
+    /// - Parameter indexPath: indexPath from the cell where the button belongs
     private func onPlusButtonClick(indexPath: IndexPath) {
         let category = dataManager.getCategory(index: indexPath.section)
         let supermarketItem = dataManager.getSupermarketItem(category: category, index: indexPath.row)
@@ -244,6 +257,9 @@ extension HomeViewController: UITableViewDelegate {
         cell.quantityLabel.text = String(checkoutItem.getUnits())
     }
     
+    /// Function performed when the user taps on the minus button of the tableView cells
+    ///
+    /// - Parameter indexPath: indexPath from the cell where the button belongs
     private func onMinusButtonClick(indexPath: IndexPath) {
         let category = dataManager.getCategory(index: indexPath.section)
         let supermarketItem = dataManager.getSupermarketItem(category: category, index: indexPath.row)
