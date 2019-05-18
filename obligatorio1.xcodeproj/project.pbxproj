@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6D801AAEDFF4EFBAE781BD85 /* Pods_obligatorio1.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 480C6A3DD921EB8C7DBC6445 /* Pods_obligatorio1.framework */; };
 		920373B5226D3B7A009A6C16 /* BannerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920373B4226D3B7A009A6C16 /* BannerCollectionViewCell.swift */; };
 		920373B7226D3BDB009A6C16 /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920373B6226D3BDB009A6C16 /* ItemTableViewCell.swift */; };
 		920373BB226D3CC9009A6C16 /* CartCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920373BA226D3CC9009A6C16 /* CartCollectionViewCell.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		480C6A3DD921EB8C7DBC6445 /* Pods_obligatorio1.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_obligatorio1.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		920373B4226D3B7A009A6C16 /* BannerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCollectionViewCell.swift; sourceTree = "<group>"; };
 		920373B6226D3BDB009A6C16 /* ItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableViewCell.swift; sourceTree = "<group>"; };
 		920373BA226D3CC9009A6C16 /* CartCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -44,6 +46,8 @@
 		92EEEB28228E3F750052A114 /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		92EEEB29228E3F760052A114 /* AuthenticationResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationResponse.swift; sourceTree = "<group>"; };
 		92EEEB2C228E44340052A114 /* Purchase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Purchase.swift; sourceTree = "<group>"; };
+		9554F399D16C7C372B377BBE /* Pods-obligatorio1.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-obligatorio1.release.xcconfig"; path = "Pods/Target Support Files/Pods-obligatorio1/Pods-obligatorio1.release.xcconfig"; sourceTree = "<group>"; };
+		BA273AF81A26B78361B4B1C7 /* Pods-obligatorio1.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-obligatorio1.debug.xcconfig"; path = "Pods/Target Support Files/Pods-obligatorio1/Pods-obligatorio1.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,12 +55,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D801AAEDFF4EFBAE781BD85 /* Pods_obligatorio1.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		287DCB8F88C9F854F8C0DA55 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				480C6A3DD921EB8C7DBC6445 /* Pods_obligatorio1.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4844F97229A65D4B8BFF3AC6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BA273AF81A26B78361B4B1C7 /* Pods-obligatorio1.debug.xcconfig */,
+				9554F399D16C7C372B377BBE /* Pods-obligatorio1.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		920FE30922727F950073805D /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -74,6 +96,8 @@
 			children = (
 				92D1678F226CBA2900E0110F /* obligatorio1 */,
 				92D1678E226CBA2900E0110F /* Products */,
+				4844F97229A65D4B8BFF3AC6 /* Pods */,
+				287DCB8F88C9F854F8C0DA55 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -136,9 +160,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 92D1679F226CBA2B00E0110F /* Build configuration list for PBXNativeTarget "obligatorio1" */;
 			buildPhases = (
+				EC7F1F70C1EC399BFEE68C5D /* [CP] Check Pods Manifest.lock */,
 				92D16789226CBA2900E0110F /* Sources */,
 				92D1678A226CBA2900E0110F /* Frameworks */,
 				92D1678B226CBA2900E0110F /* Resources */,
+				2E32C5D9003B081D13A5E018 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -194,6 +220,49 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2E32C5D9003B081D13A5E018 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-obligatorio1/Pods-obligatorio1-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/AlamofireObjectMapper/AlamofireObjectMapper.framework",
+				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireObjectMapper.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-obligatorio1/Pods-obligatorio1-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EC7F1F70C1EC399BFEE68C5D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-obligatorio1-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		92D16789226CBA2900E0110F /* Sources */ = {
@@ -356,6 +425,7 @@
 		};
 		92D167A0226CBA2B00E0110F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BA273AF81A26B78361B4B1C7 /* Pods-obligatorio1.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -375,6 +445,7 @@
 		};
 		92D167A1226CBA2B00E0110F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9554F399D16C7C372B377BBE /* Pods-obligatorio1.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
