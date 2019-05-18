@@ -17,8 +17,8 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var cartNavigationButton: UIBarButtonItem!
     @IBOutlet weak var searchBar: UISearchBar!
     
-    var dataManager = DataManager.sharedInstance
-    var filteredSupermarketItems: [Category:[SupermarketItem]] = [:]
+    var dataManager = ModelManager.sharedInstance
+    var filteredSupermarketItems: [Category:[Product]] = [:]
     var searchIsActive = false
     
     override func viewDidLoad() {
@@ -31,7 +31,7 @@ class HomeViewController: UIViewController {
         searchBar.delegate = self
         
         // Configuring the scroll banner
-        scrollBanner.numberOfPages = dataManager.getBannerItems().count
+        scrollBanner.numberOfPages = dataManager.getPromotions().count
         scrollBanner.currentPage = 0
         
         updateStateCartNavigationButton()
@@ -107,7 +107,7 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataManager.getBannerItems().count
+        return dataManager.getPromotions().count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -115,7 +115,7 @@ extension HomeViewController: UICollectionViewDataSource {
             fatalError("The dequeued cell is not an instance of SectionCollectionViewCell")
         }
         
-        let banner = dataManager.getBannerItem(index: indexPath.row)
+        let banner = dataManager.getPromotion(index: indexPath.row)
         cell.configCell(banner: banner)
         
         return cell
@@ -142,7 +142,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 extension HomeViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return dataManager.getSupermarketItems().count
+        return dataManager.getProducts().count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -153,13 +153,13 @@ extension HomeViewController: UITableViewDataSource {
         let category = dataManager.getCategory(index: section)
         
         // Use all of the items or the filtered items
-        var items: [Category: [SupermarketItem]]
+        var items: [Category: [Product]]
         if searchIsActive {
             // Use the filtered items
             items = filteredSupermarketItems
         } else {
             // Use all of the items
-            items = dataManager.getSupermarketItems()
+            items = dataManager.getProducts()
         }
         
         guard let itemsInCategory = items[category] else {
@@ -176,20 +176,20 @@ extension HomeViewController: UITableViewDataSource {
         
         // Obtain the item to config the cell
         let category = dataManager.getCategory(index: indexPath.section)
-        var item: SupermarketItem
+        var item: Product
         if searchIsActive {
             // Use the filtered items
             item = filteredSupermarketItems[category]![indexPath.row]
         } else {
             // Use all of the items
-            item = dataManager.getSupermarketItem(category: category, index: indexPath.row)
+            item = dataManager.getProduct(category: category, index: indexPath.row)
         }
         
         // Check it that item has units in the cart
         let checkoutItemIndex = dataManager.getCheckoutItemIndex(name: item.name)
         var units = 0
         if checkoutItemIndex != nil {
-            units = dataManager.getCheckoutItem(index: checkoutItemIndex!).getUnits()
+            units = dataManager.getCheckoutItem(index: checkoutItemIndex!).quantity
         }
         
         // Config the cell
@@ -207,13 +207,13 @@ extension HomeViewController: UITableViewDelegate {
     /// - Parameter indexPath: indexPath from the cell where the button belongs
     private func onAddButtonClick(indexPath: IndexPath) {
         let category = dataManager.getCategory(index: indexPath.section)
-        let item = dataManager.getSupermarketItem(category: category, index: indexPath.row)
+        let item = dataManager.getProduct(category: category, index: indexPath.row)
         guard let cell = itemsTableView.cellForRow(at: indexPath) as? ItemTableViewCell else {
             fatalError("The cell is not ItemTableViewCell type")
         }
         
         // Add item to cart with quantity in 1
-        let newCheckoutItem = CheckoutItem(item: item, units: 1)
+        let newCheckoutItem = CheckoutItem(product: item, units: 1)
         dataManager.addCheckoutItem(newItem: newCheckoutItem)
         
         // Hide add button
@@ -233,7 +233,7 @@ extension HomeViewController: UITableViewDelegate {
     /// - Parameter indexPath: indexPath from the cell where the button belongs
     private func onPlusButtonClick(indexPath: IndexPath) {
         let category = dataManager.getCategory(index: indexPath.section)
-        let supermarketItem = dataManager.getSupermarketItem(category: category, index: indexPath.row)
+        let supermarketItem = dataManager.getProduct(category: category, index: indexPath.row)
         
         guard let itemIndex = dataManager.getCheckoutItemIndex(name: supermarketItem.name)  else {
             fatalError("There should be a checkout item for \(supermarketItem.name)")
@@ -245,13 +245,13 @@ extension HomeViewController: UITableViewDelegate {
         let checkoutItem = dataManager.getCheckoutItem(index: itemIndex)
         
         // Check if we are going to reach the maximum quantity
-        if checkoutItem.getUnits() == (checkoutItem.getMax()-1) {
+        if checkoutItem.quantity == (checkoutItem.MAX_UNITS-1) {
             // Disable plus button so they can't go over the maximum
             cell.plusButton.isEnabled = false
         }
         
         // Increase the checkoutItem quantity
-        checkoutItem.setUnits(units: checkoutItem.getUnits()+1)
+        checkoutItem.quantity = checkoutItem.quantity+1
         dataManager.updateCheckoutItems(index: itemIndex, item: checkoutItem)
         // Update the quantity label
         cell.quantityLabel.text = String(checkoutItem.getUnits())
@@ -262,7 +262,7 @@ extension HomeViewController: UITableViewDelegate {
     /// - Parameter indexPath: indexPath from the cell where the button belongs
     private func onMinusButtonClick(indexPath: IndexPath) {
         let category = dataManager.getCategory(index: indexPath.section)
-        let supermarketItem = dataManager.getSupermarketItem(category: category, index: indexPath.row)
+        let supermarketItem = dataManager.getProduct(category: category, index: indexPath.row)
         
         guard let itemIndex = dataManager.getCheckoutItemIndex(name: supermarketItem.name)  else {
             fatalError("There should be a checkout item for \(supermarketItem.name)")
@@ -274,7 +274,7 @@ extension HomeViewController: UITableViewDelegate {
         let checkoutItem = dataManager.getCheckoutItem(index: itemIndex)
         
         // If the current quantity equals max, enable plus button again
-        if checkoutItem.getUnits() == checkoutItem.getMax() {
+        if checkoutItem.quantity == checkoutItem.MAX_UNITS {
             cell.plusButton.isEnabled = true
         }
         
@@ -288,10 +288,10 @@ extension HomeViewController: UITableViewDelegate {
             cell.quantityControlView.isHidden = true
         } else {
             // Decrease checkoutItem quantity
-            checkoutItem.setUnits(units: checkoutItem.getUnits()-1)
+            checkoutItem.quantity = checkoutItem.quantity-1
             dataManager.updateCheckoutItems(index: itemIndex, item: checkoutItem)
             // Update the quantity label
-            cell.quantityLabel.text = String(checkoutItem.getUnits())
+            cell.quantityLabel.text = String(checkoutItem.quantity)
         }
         
         // Config the cartNavigationButton in case the checkoutItems became empty
@@ -313,7 +313,7 @@ extension HomeViewController: UISearchBarDelegate {
         
         // If the search is active then filter the items
         if searchIsActive {
-            let allItems = dataManager.getSupermarketItems()
+            let allItems = dataManager.getProducts()
             filteredSupermarketItems = allItems.mapValues {
                 // Apply a mapping function over the values of the dictionary
                 (items) in (items.filter {
@@ -329,14 +329,14 @@ extension HomeViewController: UISearchBarDelegate {
     }
     
     
-    /// Function that checks if a SupermarketItem matches a text input from the search bar.
+    /// Function that checks if a Product matches a text input from the search bar.
     /// Criteria: contained on the name or category
     ///
     /// - Parameters:
     ///   - item: supermarket item to check against
     ///   - text: input from the search bar
     /// - Returns: boolean value wether it matches or no
-    private func checkItemForMatch(item: SupermarketItem, text: String) -> Bool {
+    private func checkItemForMatch(item: Product, text: String) -> Bool {
         if item.name.lowercased().contains(text.lowercased()) {
             return true
         } else if item.category.rawValue.lowercased().contains(text.lowercased()) {

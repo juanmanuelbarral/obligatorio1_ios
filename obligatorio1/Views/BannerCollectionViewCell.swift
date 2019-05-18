@@ -18,8 +18,8 @@ class BannerCollectionViewCell: UICollectionViewCell {
     /// Function that configures the cell with its needed information
     ///
     /// - Parameter banner: banner object to be reflected on the cell
-    func configCell(banner: BannerItem) {
-        bannerImageView.image = UIImage(named: banner.image)
+    func configCell(banner: Promotion) {
+        bannerImageView.image = UIImage(named: banner.photoUrl)
         bannerImageView.layer.cornerRadius = 5
         nameLabel.text = banner.name
     }

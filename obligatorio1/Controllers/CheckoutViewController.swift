@@ -15,7 +15,7 @@ class CheckoutViewController: UIViewController {
     @IBOutlet weak var checkoutButton: UIButton!
     @IBOutlet weak var finalPriceLabel: UILabel!
     
-    private var dataManager = DataManager.sharedInstance
+    private var dataManager = ModelManager.sharedInstance
     private var pickerChoices: [Int] = [Int](0...10)
     private var selectedOptionPicker = 0
     private var pickerView = UIPickerView(frame: CGRect(x: 5, y: 20, width: 250, height: 140))
@@ -52,7 +52,7 @@ class CheckoutViewController: UIViewController {
     private func calculateTotalPrice() -> Int {
         var totalPrice = 0
         for checkoutItem in dataManager.getCheckoutItems() {
-            totalPrice += checkoutItem.getUnits() * checkoutItem.item.price
+            totalPrice += checkoutItem.quantity * checkoutItem.product.price
         }
         return totalPrice
     }
@@ -128,7 +128,7 @@ extension CheckoutViewController: UICollectionViewDelegateFlowLayout {
             // Change the units for the checkoutItem to the selected option or remove if cero
             if self.selectedOptionPicker != 0 {
                 let changedItem = self.dataManager.getCheckoutItems()[indexPath.row]
-                changedItem.setUnits(units: self.selectedOptionPicker)
+                changedItem.quantity = self.selectedOptionPicker
                 self.dataManager.updateCheckoutItems(index: indexPath.row, item: changedItem)
             } else {
                 self.dataManager.removeCheckoutItem(index: indexPath.row)
