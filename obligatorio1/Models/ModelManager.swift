@@ -21,17 +21,17 @@ class ModelManager {
     private init() {
         
         // HARDCODED - loading of products
-        addProduct(name: "Avocado", price: 30, imageLogo: "Avocado", imageItem: "Avocado", category: Category.Veggies)
-        addProduct(name: "Cucumber", price: 30, imageLogo: "Cucumber", imageItem: "Cucumber", category: Category.Veggies)
-        addProduct(name: "Grapefruit", price: 45, imageLogo: "Grapefruit", imageItem: "Grapefruit-2", category: Category.Fruits)
-        addProduct(name: "Kiwi", price: 30, imageLogo: "Kiwi", imageItem: "Kiwi-2", category: Category.Fruits)
-        addProduct(name: "Watermelon", price: 45, imageLogo: "Watermelon", imageItem: "Watermelon-2", category: Category.Fruits)
+//        addProduct(name: "Avocado", price: 30, imageLogo: "Avocado", imageItem: "Avocado", category: Category.Veggies)
+//        addProduct(name: "Cucumber", price: 30, imageLogo: "Cucumber", imageItem: "Cucumber", category: Category.Veggies)
+//        addProduct(name: "Grapefruit", price: 45, imageLogo: "Grapefruit", imageItem: "Grapefruit-2", category: Category.Fruits)
+//        addProduct(name: "Kiwi", price: 30, imageLogo: "Kiwi", imageItem: "Kiwi-2", category: Category.Fruits)
+//        addProduct(name: "Watermelon", price: 45, imageLogo: "Watermelon", imageItem: "Watermelon-2", category: Category.Fruits)
         
         // HARCODED - loading of promotions
-        promotions.append(Promotion(name: "Brazilian Bananas", photoUrl: "Banner-1"))
-        promotions.append(Promotion(name: "Barbados Grapefruit", photoUrl: "Banner-2"))
-        promotions.append(Promotion(name: "Indian Cucumbers", photoUrl: "Banner-3"))
-        promotions.append(Promotion(name: "Chinese Kiwis", photoUrl: "Banner-4"))
+//        promotions.append(Promotion(name: "Brazilian Bananas", photoUrl: "Banner-1"))
+//        promotions.append(Promotion(name: "Barbados Grapefruit", photoUrl: "Banner-2"))
+//        promotions.append(Promotion(name: "Indian Cucumbers", photoUrl: "Banner-3"))
+//        promotions.append(Promotion(name: "Chinese Kiwis", photoUrl: "Banner-4"))
         
     }
     

@@ -207,20 +207,20 @@ extension HomeViewController: UITableViewDelegate {
     /// - Parameter indexPath: indexPath from the cell where the button belongs
     private func onAddButtonClick(indexPath: IndexPath) {
         let category = dataManager.getCategory(index: indexPath.section)
-        let item = dataManager.getProduct(category: category, index: indexPath.row)
+        let product = dataManager.getProduct(category: category, index: indexPath.row)
         guard let cell = itemsTableView.cellForRow(at: indexPath) as? ItemTableViewCell else {
             fatalError("The cell is not ItemTableViewCell type")
         }
         
         // Add item to cart with quantity in 1
-        let newCheckoutItem = CheckoutItem(product: item, units: 1)
+        let newCheckoutItem = CheckoutItem(product: product, quantity: 1)
         dataManager.addCheckoutItem(newItem: newCheckoutItem)
         
         // Hide add button
         cell.addButton.isHidden = true
         
         // Set quantity label and show quantityControlView
-        cell.quantityLabel.text = String(newCheckoutItem.getUnits())
+        cell.quantityLabel.text = String(newCheckoutItem.quantity)
         cell.quantityControlView.isHidden = false
         
         // Config the cartNavigationButton in case it was disabled
@@ -254,7 +254,7 @@ extension HomeViewController: UITableViewDelegate {
         checkoutItem.quantity = checkoutItem.quantity+1
         dataManager.updateCheckoutItems(index: itemIndex, item: checkoutItem)
         // Update the quantity label
-        cell.quantityLabel.text = String(checkoutItem.getUnits())
+        cell.quantityLabel.text = String(checkoutItem.quantity)
     }
     
     /// Function performed when the user taps on the minus button of the tableView cells
@@ -279,7 +279,7 @@ extension HomeViewController: UITableViewDelegate {
         }
         
         // If the current quantity is 1
-        if checkoutItem.getUnits() == 1 {
+        if checkoutItem.quantity == 1 {
             // Remove from checkoutItems
             dataManager.removeCheckoutItem(index: itemIndex)
             // Show add button

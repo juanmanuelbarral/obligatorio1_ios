@@ -48,11 +48,11 @@ class CheckoutViewController: UIViewController {
     
     /// Calculates the price of all the items in the cart
     ///
-    /// - Returns: total price as an Int
-    private func calculateTotalPrice() -> Int {
-        var totalPrice = 0
-        for checkoutItem in dataManager.getCheckoutItems() {
-            totalPrice += checkoutItem.quantity * checkoutItem.product.price
+    /// - Returns: total price as a Float
+    private func calculateTotalPrice() -> Float {
+        var totalPrice: Float = 0
+        dataManager.getCheckoutItems().forEach { (item) in
+            totalPrice += Float(item.quantity) * item.product.price
         }
         return totalPrice
     }
