@@ -1,5 +1,5 @@
 //
-//  SupermarketItem.swift
+//  Product.swift
 //  obligatorio1
 //
 //  Created by Manu on 25/4/19.
@@ -15,23 +15,20 @@ enum Category: String {
     static let allCases = [Fruits, Veggies]
 }
 
-class SupermarketItem {
+class Product {
     
+    var id: Int
     var name: String
-    var price: Int
-    var imageLogo: String
-    var imageItem: String
+    var price: Float
     var category: Category
+    var photoUrl: String
     
-    init(name: String, price: Int, imageLogo: String, imageItem: String, category: Category) {
+    
+    init(id: Int, name: String, price: Float, photoUrl: String, category: Category) {
+        self.id = id
         self.name = name
         self.price = price
-        self.imageLogo = imageLogo
-        self.imageItem = imageItem
+        self.photoUrl = photoUrl
         self.category = category
-    }
-    
-    func getPriceString() -> String {
-        return "$\(price)"
     }
 }
