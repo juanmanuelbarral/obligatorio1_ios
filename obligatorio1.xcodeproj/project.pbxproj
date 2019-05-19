@@ -15,6 +15,8 @@
 		920FE30B22727FD30073805D /* Promotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920FE30A22727FD30073805D /* Promotion.swift */; };
 		920FE30D227284FB0073805D /* CheckoutItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920FE30C227284FB0073805D /* CheckoutItem.swift */; };
 		920FE30F22728F0D0073805D /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920FE30E22728F0D0073805D /* ModelManager.swift */; };
+		9287CB7A2290CAAD00B0D014 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9287CB792290CAAD00B0D014 /* Constants.swift */; };
+		9287CB7C2291FDDD00B0D014 /* ApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9287CB7B2291FDDD00B0D014 /* ApiManager.swift */; };
 		92D16791226CBA2900E0110F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D16790226CBA2900E0110F /* AppDelegate.swift */; };
 		92D16796226CBA2900E0110F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92D16794226CBA2900E0110F /* Main.storyboard */; };
 		92D16798226CBA2B00E0110F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92D16797226CBA2B00E0110F /* Assets.xcassets */; };
@@ -35,6 +37,8 @@
 		920FE30A22727FD30073805D /* Promotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Promotion.swift; sourceTree = "<group>"; };
 		920FE30C227284FB0073805D /* CheckoutItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutItem.swift; sourceTree = "<group>"; };
 		920FE30E22728F0D0073805D /* ModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
+		9287CB792290CAAD00B0D014 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		9287CB7B2291FDDD00B0D014 /* ApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiManager.swift; sourceTree = "<group>"; };
 		92D1678D226CBA2900E0110F /* obligatorio1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = obligatorio1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92D16790226CBA2900E0110F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92D16795226CBA2900E0110F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -82,10 +86,11 @@
 		920FE30922727F950073805D /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				920FE30A22727FD30073805D /* Promotion.swift */,
+				9287CB7B2291FDDD00B0D014 /* ApiManager.swift */,
 				920FE30C227284FB0073805D /* CheckoutItem.swift */,
 				920FE30E22728F0D0073805D /* ModelManager.swift */,
 				920FE30722727BF80073805D /* Product.swift */,
+				920FE30A22727FD30073805D /* Promotion.swift */,
 				92EEEB2C228E44340052A114 /* Purchase.swift */,
 			);
 			path = Models;
@@ -130,6 +135,7 @@
 			children = (
 				92EEEB28228E3F750052A114 /* AuthenticationManager.swift */,
 				92EEEB29228E3F760052A114 /* AuthenticationResponse.swift */,
+				9287CB792290CAAD00B0D014 /* Constants.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -231,12 +237,14 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-obligatorio1/Pods-obligatorio1-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireObjectMapper/AlamofireObjectMapper.framework",
+				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireObjectMapper.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -276,10 +284,12 @@
 				92D16791226CBA2900E0110F /* AppDelegate.swift in Sources */,
 				920FE30822727BF80073805D /* Product.swift in Sources */,
 				920FE30D227284FB0073805D /* CheckoutItem.swift in Sources */,
+				9287CB7C2291FDDD00B0D014 /* ApiManager.swift in Sources */,
 				920373B7226D3BDB009A6C16 /* ItemTableViewCell.swift in Sources */,
 				920373B5226D3B7A009A6C16 /* BannerCollectionViewCell.swift in Sources */,
 				920373BB226D3CC9009A6C16 /* CartCollectionViewCell.swift in Sources */,
 				92EEEB2B228E3F760052A114 /* AuthenticationResponse.swift in Sources */,
+				9287CB7A2290CAAD00B0D014 /* Constants.swift in Sources */,
 				92EEEB2D228E44340052A114 /* Purchase.swift in Sources */,
 				92D167A3226CC67200E0110F /* HomeViewController.swift in Sources */,
 			);

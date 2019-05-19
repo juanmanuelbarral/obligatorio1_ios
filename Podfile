@@ -7,5 +7,6 @@ target 'obligatorio1' do
 
   # Pods for obligatorio1
   pod 'AlamofireObjectMapper', '5.2.0'
+  pod 'Kingfisher', '5.0'
 
 end
