@@ -7,11 +7,12 @@
 //
 
 import Foundation
+import ObjectMapper
 
 class CheckoutItem {
     
-    let MIN_UNITS = 0
-    let MAX_UNITS = 10
+    let MIN_QUANTITY = Constants.CheckoutItem.MIN_QUANTITY
+    let MAX_QUANTITY = Constants.CheckoutItem.MAX_QUANTITY
     
     var product: Product
     private var _quantity: Int = 0
@@ -23,10 +24,10 @@ class CheckoutItem {
         set(newValue) {
             // According to what was said in class units are limited between 0 and 10
             // The setter controls these border issues
-            if newValue < MIN_UNITS {
-                self._quantity = MIN_UNITS
-            } else if newValue > MAX_UNITS {
-                self._quantity = MAX_UNITS
+            if newValue < MIN_QUANTITY {
+                self._quantity = MIN_QUANTITY
+            } else if newValue > MAX_QUANTITY {
+                self._quantity = MAX_QUANTITY
             } else {
                 self._quantity = newValue
             }
@@ -38,4 +39,14 @@ class CheckoutItem {
         self.quantity = quantity
     }
     
+    required init?(map: Map) {}
+    
+}
+
+extension CheckoutItem: Mappable {
+    
+    func mapping(map: Map) {
+        product <- map[Constants.CheckoutItem.PRODUCT_KEY]
+        quantity <- map[Constants.CheckoutItem.QUANTITY_KEY]
+    }
 }

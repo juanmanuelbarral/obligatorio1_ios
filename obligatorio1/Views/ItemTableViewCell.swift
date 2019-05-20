@@ -41,10 +41,10 @@ class ItemTableViewCell: UITableViewCell {
     ///   - units: units of that item on the cart
     func configCell(item: Product, units: Int) {
         // Formatting the photoUrl, name and price
-        itemImageView.image = UIImage(named: item.photoUrl)
+        itemImageView.image = UIImage(named: item.photoUrl!)
         itemImageView.layer.cornerRadius = itemImageView.frame.size.width/2
         nameLabel.text = item.name
-        priceLabel.text = "$\(item.price)"
+        priceLabel.text = "$\(item.price!)"
         
         
         // Formatting the addButton, and quantityControllerView

@@ -18,7 +18,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     
     var dataManager = ModelManager.sharedInstance
-    var filteredSupermarketItems: [Category:[Product]] = [:]
+    var filteredProducts: [String:[Product]] = [:]
     var searchIsActive = false
     
     override func viewDidLoad() {
@@ -112,11 +112,11 @@ extension HomeViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = bannerCollectionView.dequeueReusableCell(withReuseIdentifier: "bannerCell", for: indexPath) as? BannerCollectionViewCell else {
-            fatalError("The dequeued cell is not an instance of SectionCollectionViewCell")
+            fatalError("The dequeued cell is not an instance of BannerCollectionViewCell")
         }
         
         let banner = dataManager.getPromotion(index: indexPath.row)
-        cell.configCell(banner: banner)
+        cell.configCell(promotion: banner)
         
         return cell
     }
@@ -146,26 +146,26 @@ extension HomeViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return dataManager.getCategory(index: section).rawValue
+        return dataManager.getCategory(index: section)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let category = dataManager.getCategory(index: section)
         
         // Use all of the items or the filtered items
-        var items: [Category: [Product]]
+        var products: [String: [Product]]
         if searchIsActive {
-            // Use the filtered items
-            items = filteredSupermarketItems
+            // Use the filtered products
+            products = filteredProducts
         } else {
-            // Use all of the items
-            items = dataManager.getProducts()
+            // Use all of the products
+            products = dataManager.getProducts()
         }
         
-        guard let itemsInCategory = items[category] else {
+        guard let productsInCategory = products[category] else {
             return 0
         }
-        return itemsInCategory.count
+        return productsInCategory.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -174,26 +174,26 @@ extension HomeViewController: UITableViewDataSource {
             fatalError("The dequeued cell is not an instance of ItemTableViewCell")
         }
         
-        // Obtain the item to config the cell
+        // Obtain the product to config the cell
         let category = dataManager.getCategory(index: indexPath.section)
-        var item: Product
+        var product: Product
         if searchIsActive {
-            // Use the filtered items
-            item = filteredSupermarketItems[category]![indexPath.row]
+            // Use the filtered products
+            product = filteredProducts[category]![indexPath.row]
         } else {
-            // Use all of the items
-            item = dataManager.getProduct(category: category, index: indexPath.row)
+            // Use all of the products
+            product = dataManager.getProduct(category: category, index: indexPath.row)
         }
         
-        // Check it that item has units in the cart
-        let checkoutItemIndex = dataManager.getCheckoutItemIndex(name: item.name)
+        // Check if that item has units in the cart
+        let checkoutItemIndex = dataManager.getCheckoutItemIndex(name: product.name!)
         var units = 0
         if checkoutItemIndex != nil {
             units = dataManager.getCheckoutItem(index: checkoutItemIndex!).quantity
         }
         
         // Config the cell
-        cell.configCell(item: item, units: units)
+        cell.configCell(item: product, units: units)
         
         return cell
     }
@@ -233,10 +233,10 @@ extension HomeViewController: UITableViewDelegate {
     /// - Parameter indexPath: indexPath from the cell where the button belongs
     private func onPlusButtonClick(indexPath: IndexPath) {
         let category = dataManager.getCategory(index: indexPath.section)
-        let supermarketItem = dataManager.getProduct(category: category, index: indexPath.row)
+        let product = dataManager.getProduct(category: category, index: indexPath.row)
         
-        guard let itemIndex = dataManager.getCheckoutItemIndex(name: supermarketItem.name)  else {
-            fatalError("There should be a checkout item for \(supermarketItem.name)")
+        guard let itemIndex = dataManager.getCheckoutItemIndex(name: product.name!)  else {
+            fatalError("There should be a checkout item for \(product.name!)")
         }
         guard let cell = itemsTableView.cellForRow(at: indexPath) as? ItemTableViewCell else {
             fatalError("The cell is not ItemTableViewCell type")
@@ -244,8 +244,8 @@ extension HomeViewController: UITableViewDelegate {
         
         let checkoutItem = dataManager.getCheckoutItem(index: itemIndex)
         
-        // Check if we are going to reach the maximum quantity
-        if checkoutItem.quantity == (checkoutItem.MAX_UNITS-1) {
+        // Check if we are going to reach the maximum quantity (or already the maximum)
+        if checkoutItem.quantity >= (checkoutItem.MAX_QUANTITY-1) {
             // Disable plus button so they can't go over the maximum
             cell.plusButton.isEnabled = false
         }
@@ -262,10 +262,10 @@ extension HomeViewController: UITableViewDelegate {
     /// - Parameter indexPath: indexPath from the cell where the button belongs
     private func onMinusButtonClick(indexPath: IndexPath) {
         let category = dataManager.getCategory(index: indexPath.section)
-        let supermarketItem = dataManager.getProduct(category: category, index: indexPath.row)
+        let product = dataManager.getProduct(category: category, index: indexPath.row)
         
-        guard let itemIndex = dataManager.getCheckoutItemIndex(name: supermarketItem.name)  else {
-            fatalError("There should be a checkout item for \(supermarketItem.name)")
+        guard let itemIndex = dataManager.getCheckoutItemIndex(name: product.name!)  else {
+            fatalError("There should be a checkout item for \(product.name!)")
         }
         guard let cell = itemsTableView.cellForRow(at: indexPath) as? ItemTableViewCell else {
             fatalError("The cell is not ItemTableViewCell type")
@@ -274,7 +274,7 @@ extension HomeViewController: UITableViewDelegate {
         let checkoutItem = dataManager.getCheckoutItem(index: itemIndex)
         
         // If the current quantity equals max, enable plus button again
-        if checkoutItem.quantity == checkoutItem.MAX_UNITS {
+        if checkoutItem.quantity == checkoutItem.MAX_QUANTITY {
             cell.plusButton.isEnabled = true
         }
         
@@ -314,12 +314,12 @@ extension HomeViewController: UISearchBarDelegate {
         // If the search is active then filter the items
         if searchIsActive {
             let allItems = dataManager.getProducts()
-            filteredSupermarketItems = allItems.mapValues {
+            filteredProducts = allItems.mapValues {
                 // Apply a mapping function over the values of the dictionary
                 (items) in (items.filter {
                     // Filter those results that match with the given conditions
                     // given conditions for the project: filters by name and category
-                    (item) in checkItemForMatch(item: item, text: searchText)
+                    (item) in checkItemForMatch(product: item, text: searchText)
                 })
             }
         }
@@ -336,10 +336,10 @@ extension HomeViewController: UISearchBarDelegate {
     ///   - item: supermarket item to check against
     ///   - text: input from the search bar
     /// - Returns: boolean value wether it matches or no
-    private func checkItemForMatch(item: Product, text: String) -> Bool {
-        if item.name.lowercased().contains(text.lowercased()) {
+    private func checkItemForMatch(product: Product, text: String) -> Bool {
+        if product.name!.lowercased().contains(text.lowercased()) {
             return true
-        } else if item.category.rawValue.lowercased().contains(text.lowercased()) {
+        } else if product.category!.lowercased().contains(text.lowercased()) {
             return true
         } else {
             return false

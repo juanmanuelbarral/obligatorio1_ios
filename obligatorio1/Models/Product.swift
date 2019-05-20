@@ -7,28 +7,34 @@
 //
 
 import Foundation
-
-enum Category: String {
-    case Fruits = "Fruits"
-    case Veggies = "Veggies"
-    
-    static let allCases = [Fruits, Veggies]
-}
+import ObjectMapper
 
 class Product {
     
-    var id: Int
-    var name: String
-    var price: Float
-    var category: Category
-    var photoUrl: String
+    var id: Int?
+    var name: String?
+    var price: Float?
+    var category: String?
+    var photoUrl: String?
     
     
-    init(id: Int, name: String, price: Float, photoUrl: String, category: Category) {
+    init(id: Int, name: String, price: Float, photoUrl: String, category: String) {
         self.id = id
         self.name = name
         self.price = price
         self.photoUrl = photoUrl
         self.category = category
+    }
+    
+    required init?(map: Map) {}
+}
+
+extension Product: Mappable {
+    func mapping(map: Map) {
+        id <- map[Constants.Product.ID_KEY]
+        name <- map[Constants.Product.NAME_KEY]
+        price <- map[Constants.Product.PRICE_KEY]
+        category <- map[Constants.Product.CATEGORY_KEY]
+        photoUrl <- map[Constants.Product.PHOTO_URL_KEY]
     }
 }

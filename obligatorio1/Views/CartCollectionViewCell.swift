@@ -20,10 +20,10 @@ class CartCollectionViewCell: UICollectionViewCell {
     ///
     /// - Parameter checkoutItem: checkoutItem to be reflected on the cell
     func configCell(checkoutItem: CheckoutItem) {
-        cartItemImage.image = UIImage(named: checkoutItem.product.photoUrl)
+        cartItemImage.image = UIImage(named: checkoutItem.product.photoUrl!)
         cartItemImage.layer.cornerRadius = 5
         nameLabel.text = checkoutItem.product.name
-        priceLabel.text = "$\(checkoutItem.product.price)"
+        priceLabel.text = "$\(checkoutItem.product.price!)"
         unitsLabel.text = "\(checkoutItem.quantity) units"
     }
 }

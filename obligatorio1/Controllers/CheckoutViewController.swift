@@ -52,7 +52,7 @@ class CheckoutViewController: UIViewController {
     private func calculateTotalPrice() -> Float {
         var totalPrice: Float = 0
         dataManager.getCheckoutItems().forEach { (item) in
-            totalPrice += Float(item.quantity) * item.product.price
+            totalPrice += Float(item.quantity) * item.product.price!
         }
         return totalPrice
     }
@@ -73,6 +73,7 @@ class CheckoutViewController: UIViewController {
         }
     }
     
+    // TODO: realizar POST
     @IBAction func checkoutButtonClick(_ sender: Any) {
         // Show alert that the transaction was succesful
         let alertController = UIAlertController(title: "Success!", message: "The transaction was successful", preferredStyle: .alert)

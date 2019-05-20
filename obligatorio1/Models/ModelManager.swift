@@ -14,25 +14,19 @@ class ModelManager {
 //    Property for the singleton
     static let sharedInstance = ModelManager()
     
-    private var products: [Category:[Product]] = [:]
+    private let apiManager = ApiManager.sharedInstance
+    private var productCategories: [String] = []
+    private var products: [String:[Product]] = [:]
     private var promotions: [Promotion] = []
     private var checkoutItems: [CheckoutItem] = []
+    private var purchases: [Purchase] = []
     
     private init() {
         
-        // HARDCODED - loading of products
-//        addProduct(name: "Avocado", price: 30, imageLogo: "Avocado", imageItem: "Avocado", category: Category.Veggies)
-//        addProduct(name: "Cucumber", price: 30, imageLogo: "Cucumber", imageItem: "Cucumber", category: Category.Veggies)
-//        addProduct(name: "Grapefruit", price: 45, imageLogo: "Grapefruit", imageItem: "Grapefruit-2", category: Category.Fruits)
-//        addProduct(name: "Kiwi", price: 30, imageLogo: "Kiwi", imageItem: "Kiwi-2", category: Category.Fruits)
-//        addProduct(name: "Watermelon", price: 45, imageLogo: "Watermelon", imageItem: "Watermelon-2", category: Category.Fruits)
-        
-        // HARCODED - loading of promotions
-//        promotions.append(Promotion(name: "Brazilian Bananas", photoUrl: "Banner-1"))
-//        promotions.append(Promotion(name: "Barbados Grapefruit", photoUrl: "Banner-2"))
-//        promotions.append(Promotion(name: "Indian Cucumbers", photoUrl: "Banner-3"))
-//        promotions.append(Promotion(name: "Chinese Kiwis", photoUrl: "Banner-4"))
-        
+        // Load data from API
+        loadProducts()
+        loadPromotions()
+        loadPurchases()
     }
     
     private func inRange(index: Int, count: Int) -> Bool {
@@ -43,7 +37,16 @@ class ModelManager {
         }
     }
     
+    
     // promotions: [Promotion] FUNCTIONS
+    private func loadPromotions() {
+        if let promotionsResponse = apiManager.getPromotions() {
+            promotions = promotionsResponse
+        } else {
+            promotions = []
+        }
+    }
+    
     func getPromotions() -> [Promotion] {
         return promotions
     }
@@ -56,45 +59,68 @@ class ModelManager {
         }
     }
     
-    // products: [Category:[SupermarketItems]] FUNCTIONS
-    func getCategories() -> [Category] {
-        return Category.allCases
+    
+    // products: [String:[SupermarketItems]] FUNCTIONS
+    private func loadProducts() {
+        if let productsResponse = apiManager.getProducts() {
+            productsResponse.forEach { (product) in
+                let category = product.category ?? Constants.Product.CATEGORY_DEFAULT_VALUE
+                
+                // IF the category exists in the dictionary -> append another product
+                // IF NOT create the category with the new product
+                if products[category] != nil {
+                    products[category]!.append(product)
+                } else {
+                    productCategories.append(category)
+                    products.updateValue([product], forKey: category)
+                }
+            }
+        } else {
+            products = [:]
+        }
     }
     
-    func getCategory(index: Int) -> Category {
+    func getCategories() -> [String] {
+        return productCategories
+    }
+    
+    func getCategory(index: Int) -> String {
         if inRange(index: index, count: getCategories().count) {
             return getCategories()[index]
         } else {
-             fatalError("ERROR: out of index in Category.allCases with index \(index)")
+             fatalError("ERROR: out of index in productCateogories with index \(index)")
         }
     }
     
-    func getProducts() -> [Category:[Product]] {
+    func getProducts() -> [String:[Product]] {
         return products
     }
     
-    func getProduct(category: Category, index: Int) -> Product {
-        guard let items = products[category] else {
-            fatalError("There is no category \(category.rawValue)")
+    func getProduct(category: String, index: Int) -> Product {
+        guard let productsInCategory = products[category] else {
+            fatalError("There is no category \(category)")
         }
         
-        if inRange(index: index, count: items.count) {
-            return items[index]
+        if inRange(index: index, count: productsInCategory.count) {
+            return productsInCategory[index]
         } else {
-            fatalError("ERROR: index out of range in products with category \(category.rawValue) and index \(index)")
+            fatalError("ERROR: index out of range in products with category \(category) and index \(index)")
         }
-        
     }
     
-    func addProduct(id: Int, name: String, price: Float, photoUrl: String, category: Category) {
-        // IF the category exists in the dictionary (therefore already has an item, then append another item)
-        // IF NOT create the category with the supermarketItem
+    //    TODO: addProduct necesary?
+    func addProduct(id: Int, name: String, price: Float, photoUrl: String, category: String) {
+        let newProduct = Product(id: id, name: name, price: price, photoUrl: photoUrl, category: category)
+        // IF the category exists in the dictionary -> append another product
+        // IF NOT create the category with the new product
         if products[category] != nil {
-            products[category]!.append(Product(id: id, name: name, price: price, photoUrl: photoUrl, category: category))
+            products[category]!.append(newProduct)
         } else {
-            products.updateValue([Product(id: id, name: name, price: price, photoUrl: photoUrl, category: category)], forKey: category)
+            productCategories.append(category)
+            products.updateValue([newProduct], forKey: category)
         }
     }
+    
     
     // checkoutItems: [CheckoutItem] FUNCTIONS
     func getCheckoutItems() -> [CheckoutItem] {
@@ -109,7 +135,6 @@ class ModelManager {
         }
     }
     
-    // TODO: change this for getCheckoutItem(name: String) -> CheckoutItem?
     func getCheckoutItemIndex(name: String) -> Int? {
         var index = 0
         while index < checkoutItems.count {
@@ -123,7 +148,7 @@ class ModelManager {
     }
     
     func addCheckoutItem(newItem: CheckoutItem) {
-        let nameNewItem = newItem.product.name
+        let nameNewItem = newItem.product.name!
         let alreadyExists = getCheckoutItemIndex(name: nameNewItem) != nil
         if !alreadyExists {
             checkoutItems.append(newItem)
@@ -146,5 +171,15 @@ class ModelManager {
     
     func checkoutItemsIsEmpty() -> Bool {
         return checkoutItems.isEmpty
+    }
+    
+    
+    // purchases: [Purchase] FUNCTIONS
+    func loadPurchases() {
+        if let purchasesResponse = apiManager.getPurchases() {
+            purchases = purchasesResponse
+        } else {
+            purchases = []
+        }
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ObjectMapper
 
 class Purchase {
     
@@ -20,11 +21,22 @@ class Purchase {
         self.total = calculateTotal()
     }
     
+    required init?(map: Map) {}
+    
     private func calculateTotal() -> Float {
         var totalPrice: Float = 0
         products.forEach { (item: CheckoutItem) in
-            totalPrice += Float(item.quantity) * item.product.price
+            // TODO: price should be checked not to be empty
+            totalPrice += Float(item.quantity) * item.product.price!
         }
         return totalPrice
+    }
+}
+
+extension Purchase: Mappable {
+    
+    func mapping(map: Map) {
+        date <- map[Constants.Purchase.DATE_KEY]
+        products <- map[Constants.Purchase.PRODUCTS_KEY]
     }
 }
