@@ -11,8 +11,8 @@ import ObjectMapper
 
 class Purchase {
     
-    var date: String
-    var products: [CheckoutItem]
+    var date: String?
+    var products: [CheckoutItem]?
     var total: Float = 0
     
     init(date: String, products: [CheckoutItem]) {
@@ -21,13 +21,17 @@ class Purchase {
         self.total = calculateTotal()
     }
     
-    required init?(map: Map) {}
+    required init?(map: Map) {
+        if map.JSON[Constants.Purchase.DATE_KEY] == nil { return nil }
+        if map.JSON[Constants.Purchase.PRODUCTS_KEY] == nil { return nil }
+    }
     
     private func calculateTotal() -> Float {
         var totalPrice: Float = 0
+        guard let products = products else { return totalPrice }
         products.forEach { (item: CheckoutItem) in
-            // TODO: price should be checked not to be empty
-            totalPrice += Float(item.quantity) * item.product.price!
+            // I know price is not empry bc in the init? of Product if price==nil -> doesn't create that Product
+            totalPrice += Float(item.quantity) * item.product!.price!
         }
         return totalPrice
     }

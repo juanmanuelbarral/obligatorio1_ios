@@ -14,7 +14,7 @@ class CheckoutItem {
     let MIN_QUANTITY = Constants.CheckoutItem.MIN_QUANTITY
     let MAX_QUANTITY = Constants.CheckoutItem.MAX_QUANTITY
     
-    var product: Product
+    var product: Product?
     private var _quantity: Int = 0
     var quantity: Int {
         get {
@@ -39,7 +39,10 @@ class CheckoutItem {
         self.quantity = quantity
     }
     
-    required init?(map: Map) {}
+    required init?(map: Map) {
+        if map.JSON[Constants.CheckoutItem.PRODUCT_KEY] == nil { return nil }
+        if map.JSON[Constants.CheckoutItem.QUANTITY_KEY] == nil { return nil }
+    }
     
 }
 

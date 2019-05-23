@@ -21,7 +21,15 @@ class Promotion {
         self.photoUrl = photoUrl
     }
     
-    required init?(map: Map) {}
+    required init?(map: Map) {
+        if map.JSON[Constants.Promotion.NAME_KEY] == nil { return nil }
+        if map.JSON[Constants.Promotion.DESCRIPTION_KEY] == nil {
+            self.description = ""
+        }
+        if map.JSON[Constants.Promotion.PHOTO_URL_KEY] == nil {
+            self.photoUrl = Constants.Promotion.PHOTO_URL_DEFAULT_VALUE
+        }
+    }
 }
 
 

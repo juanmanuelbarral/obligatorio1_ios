@@ -26,7 +26,17 @@ class Product {
         self.category = category
     }
     
-    required init?(map: Map) {}
+    required init?(map: Map) {
+        if map.JSON[Constants.Product.ID_KEY] == nil { return nil }
+        if map.JSON[Constants.Product.NAME_KEY] == nil { return nil }
+        if map.JSON[Constants.Product.PRICE_KEY] == nil { return nil }
+        if map.JSON[Constants.Product.CATEGORY_KEY] == nil {
+            self.category = Constants.Product.CATEGORY_DEFAULT_VALUE
+        }
+        if map.JSON[Constants.Product.PHOTO_URL_KEY] == nil {
+            self.photoUrl = Constants.Product.PHOTO_URL_DEFAULT_VALUE2
+        }
+    }
 }
 
 extension Product: Mappable {
