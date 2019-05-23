@@ -52,7 +52,7 @@ class CheckoutViewController: UIViewController {
     private func calculateTotalPrice() -> Float {
         var totalPrice: Float = 0
         dataManager.getCheckoutItems().forEach { (item) in
-            totalPrice += Float(item.quantity) * item.product.price!
+            totalPrice += Float(item.quantity) * item.product!.price!
         }
         return totalPrice
     }

@@ -21,13 +21,7 @@ class ModelManager {
     private var checkoutItems: [CheckoutItem] = []
     private var purchases: [Purchase] = []
     
-    private init() {
-        
-        // Load data from API
-        loadProducts()
-        loadPromotions()
-        loadPurchases()
-    }
+    private init() {}
     
     private func inRange(index: Int, count: Int) -> Bool {
         if index < count && index >= 0 {
@@ -39,11 +33,16 @@ class ModelManager {
     
     
     // promotions: [Promotion] FUNCTIONS
-    private func loadPromotions() {
-        if let promotionsResponse = apiManager.getPromotions() {
-            promotions = promotionsResponse
-        } else {
-            promotions = []
+    func loadPromotions(onCompletion: @escaping ([Promotion]?, Error?) -> Void) {
+        apiManager.getPromotions { (response: [Promotion]?, error: Error?) in
+            if let error = error {
+                onCompletion(nil, error)
+            }
+            
+            if let promotionsResponse = response {
+                self.promotions = promotionsResponse
+                onCompletion(promotionsResponse, nil)
+            }
         }
     }
     
@@ -61,22 +60,27 @@ class ModelManager {
     
     
     // products: [String:[SupermarketItems]] FUNCTIONS
-    private func loadProducts() {
-        if let productsResponse = apiManager.getProducts() {
-            productsResponse.forEach { (product) in
-                let category = product.category ?? Constants.Product.CATEGORY_DEFAULT_VALUE
-                
-                // IF the category exists in the dictionary -> append another product
-                // IF NOT create the category with the new product
-                if products[category] != nil {
-                    products[category]!.append(product)
-                } else {
-                    productCategories.append(category)
-                    products.updateValue([product], forKey: category)
-                }
+    func loadProducts(onCompletion: @escaping ([Product]?, Error?) -> Void) {
+        apiManager.getProducts { (response: [Product]?, error: Error?) in
+            if let error = error {
+                onCompletion(nil, error)
             }
-        } else {
-            products = [:]
+            if let productsResponse = response {
+                self.products = [:]
+                productsResponse.forEach { (product) in
+                    let category = product.category ?? Constants.Product.CATEGORY_DEFAULT_VALUE
+                    
+                    // IF the category exists in the dictionary -> append another product
+                    // IF NOT create the category with the new product
+                    if self.products[category] != nil {
+                        self.products[category]!.append(product)
+                    } else {
+                        self.productCategories.append(category)
+                        self.products.updateValue([product], forKey: category)
+                    }
+                }
+                onCompletion(productsResponse, nil)
+            }
         }
     }
     
@@ -108,19 +112,6 @@ class ModelManager {
         }
     }
     
-    //    TODO: addProduct necesary?
-    func addProduct(id: Int, name: String, price: Float, photoUrl: String, category: String) {
-        let newProduct = Product(id: id, name: name, price: price, photoUrl: photoUrl, category: category)
-        // IF the category exists in the dictionary -> append another product
-        // IF NOT create the category with the new product
-        if products[category] != nil {
-            products[category]!.append(newProduct)
-        } else {
-            productCategories.append(category)
-            products.updateValue([newProduct], forKey: category)
-        }
-    }
-    
     
     // checkoutItems: [CheckoutItem] FUNCTIONS
     func getCheckoutItems() -> [CheckoutItem] {
@@ -138,7 +129,7 @@ class ModelManager {
     func getCheckoutItemIndex(name: String) -> Int? {
         var index = 0
         while index < checkoutItems.count {
-            if checkoutItems[index].product.name == name {
+            if checkoutItems[index].product!.name == name {
                 return index
             } else {
                 index += 1
@@ -148,7 +139,7 @@ class ModelManager {
     }
     
     func addCheckoutItem(newItem: CheckoutItem) {
-        let nameNewItem = newItem.product.name!
+        let nameNewItem = newItem.product!.name!
         let alreadyExists = getCheckoutItemIndex(name: nameNewItem) != nil
         if !alreadyExists {
             checkoutItems.append(newItem)
@@ -175,11 +166,16 @@ class ModelManager {
     
     
     // purchases: [Purchase] FUNCTIONS
-    func loadPurchases() {
-        if let purchasesResponse = apiManager.getPurchases() {
-            purchases = purchasesResponse
-        } else {
-            purchases = []
+    func loadPurchases(onCompletion: @escaping ([Purchase]?, Error?) -> Void) {
+        apiManager.getPurchases { (response: [Purchase]?, error: Error?) in
+            if let error = error {
+                onCompletion(nil, error)
+            }
+            
+            if let purchasesResponse = response {
+                self.purchases = purchasesResponse
+                onCompletion(purchasesResponse, nil)
+            }
         }
     }
 }

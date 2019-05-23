@@ -17,7 +17,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var cartNavigationButton: UIBarButtonItem!
     @IBOutlet weak var searchBar: UISearchBar!
     
-    var dataManager = ModelManager.sharedInstance
+    var modelManager = ModelManager.sharedInstance
     var filteredProducts: [String:[Product]] = [:]
     var searchIsActive = false
     
@@ -30,23 +30,39 @@ class HomeViewController: UIViewController {
         itemsTableView.dataSource = self
         searchBar.delegate = self
         
-        // Configuring the scroll banner
-        scrollBanner.numberOfPages = dataManager.getPromotions().count
-        scrollBanner.currentPage = 0
-        
-        updateStateCartNavigationButton()
+        configScrollBanner()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        modelManager.loadProducts { (products: [Product]?, error: Error?) in
+            if let error = error {
+                // TODO: show error
+                print("There was a problem with the Products. ERROR: \(error.localizedDescription)")
+            }
+            if products != nil {
+                self.itemsTableView.reloadData()
+            }
+        }
+        
+        modelManager.loadPromotions { (promotions: [Promotion]?, error: Error?) in
+            if let error = error {
+                // TODO: show error
+                print("There was a problem with the Promotions. ERROR: \(error.localizedDescription)")
+            }
+            if promotions != nil {
+                self.bannerCollectionView.reloadData()
+                self.configScrollBanner()
+            }
+        }
+        
+        updateStateCartNavigationButton()
+        
         // No large title
         self.title = ""
         if #available(iOS 11.0, *) {
             self.navigationController?.navigationBar.prefersLargeTitles = false
         }
         self.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
-        
-        // Reload tableView
-        itemsTableView.reloadData()
     }
     
     /// Function to get the indexPath of the buttons in a cell of a tableView
@@ -70,11 +86,18 @@ class HomeViewController: UIViewController {
     
     /// Function that checks if the cart navigation button should be enabled or not
     private func updateStateCartNavigationButton() {
-        if dataManager.checkoutItemsIsEmpty() {
+        if modelManager.checkoutItemsIsEmpty() {
             cartNavigationButton.isEnabled = false
         } else {
             cartNavigationButton.isEnabled = true
         }
+    }
+    
+    
+    /// Configure the scroll banner
+    private func configScrollBanner() {
+        scrollBanner.numberOfPages = modelManager.getPromotions().count
+        scrollBanner.currentPage = 0
     }
     
     
@@ -107,7 +130,7 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataManager.getPromotions().count
+        return modelManager.getPromotions().count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -115,7 +138,7 @@ extension HomeViewController: UICollectionViewDataSource {
             fatalError("The dequeued cell is not an instance of BannerCollectionViewCell")
         }
         
-        let banner = dataManager.getPromotion(index: indexPath.row)
+        let banner = modelManager.getPromotion(index: indexPath.row)
         cell.configCell(promotion: banner)
         
         return cell
@@ -142,15 +165,15 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 extension HomeViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return dataManager.getProducts().count
+        return modelManager.getProducts().count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return dataManager.getCategory(index: section)
+        return modelManager.getCategory(index: section)
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let category = dataManager.getCategory(index: section)
+        let category = modelManager.getCategory(index: section)
         
         // Use all of the items or the filtered items
         var products: [String: [Product]]
@@ -159,7 +182,7 @@ extension HomeViewController: UITableViewDataSource {
             products = filteredProducts
         } else {
             // Use all of the products
-            products = dataManager.getProducts()
+            products = modelManager.getProducts()
         }
         
         guard let productsInCategory = products[category] else {
@@ -175,21 +198,21 @@ extension HomeViewController: UITableViewDataSource {
         }
         
         // Obtain the product to config the cell
-        let category = dataManager.getCategory(index: indexPath.section)
+        let category = modelManager.getCategory(index: indexPath.section)
         var product: Product
         if searchIsActive {
             // Use the filtered products
             product = filteredProducts[category]![indexPath.row]
         } else {
             // Use all of the products
-            product = dataManager.getProduct(category: category, index: indexPath.row)
+            product = modelManager.getProduct(category: category, index: indexPath.row)
         }
         
         // Check if that item has units in the cart
-        let checkoutItemIndex = dataManager.getCheckoutItemIndex(name: product.name!)
+        let checkoutItemIndex = modelManager.getCheckoutItemIndex(name: product.name!)
         var units = 0
         if checkoutItemIndex != nil {
-            units = dataManager.getCheckoutItem(index: checkoutItemIndex!).quantity
+            units = modelManager.getCheckoutItem(index: checkoutItemIndex!).quantity
         }
         
         // Config the cell
@@ -206,15 +229,15 @@ extension HomeViewController: UITableViewDelegate {
     ///
     /// - Parameter indexPath: indexPath from the cell where the button belongs
     private func onAddButtonClick(indexPath: IndexPath) {
-        let category = dataManager.getCategory(index: indexPath.section)
-        let product = dataManager.getProduct(category: category, index: indexPath.row)
+        let category = modelManager.getCategory(index: indexPath.section)
+        let product = modelManager.getProduct(category: category, index: indexPath.row)
         guard let cell = itemsTableView.cellForRow(at: indexPath) as? ItemTableViewCell else {
             fatalError("The cell is not ItemTableViewCell type")
         }
         
         // Add item to cart with quantity in 1
         let newCheckoutItem = CheckoutItem(product: product, quantity: 1)
-        dataManager.addCheckoutItem(newItem: newCheckoutItem)
+        modelManager.addCheckoutItem(newItem: newCheckoutItem)
         
         // Hide add button
         cell.addButton.isHidden = true
@@ -232,17 +255,17 @@ extension HomeViewController: UITableViewDelegate {
     ///
     /// - Parameter indexPath: indexPath from the cell where the button belongs
     private func onPlusButtonClick(indexPath: IndexPath) {
-        let category = dataManager.getCategory(index: indexPath.section)
-        let product = dataManager.getProduct(category: category, index: indexPath.row)
+        let category = modelManager.getCategory(index: indexPath.section)
+        let product = modelManager.getProduct(category: category, index: indexPath.row)
         
-        guard let itemIndex = dataManager.getCheckoutItemIndex(name: product.name!)  else {
+        guard let itemIndex = modelManager.getCheckoutItemIndex(name: product.name!)  else {
             fatalError("There should be a checkout item for \(product.name!)")
         }
         guard let cell = itemsTableView.cellForRow(at: indexPath) as? ItemTableViewCell else {
             fatalError("The cell is not ItemTableViewCell type")
         }
         
-        let checkoutItem = dataManager.getCheckoutItem(index: itemIndex)
+        let checkoutItem = modelManager.getCheckoutItem(index: itemIndex)
         
         // Check if we are going to reach the maximum quantity (or already the maximum)
         if checkoutItem.quantity >= (checkoutItem.MAX_QUANTITY-1) {
@@ -252,7 +275,7 @@ extension HomeViewController: UITableViewDelegate {
         
         // Increase the checkoutItem quantity
         checkoutItem.quantity = checkoutItem.quantity+1
-        dataManager.updateCheckoutItems(index: itemIndex, item: checkoutItem)
+        modelManager.updateCheckoutItems(index: itemIndex, item: checkoutItem)
         // Update the quantity label
         cell.quantityLabel.text = String(checkoutItem.quantity)
     }
@@ -261,17 +284,17 @@ extension HomeViewController: UITableViewDelegate {
     ///
     /// - Parameter indexPath: indexPath from the cell where the button belongs
     private func onMinusButtonClick(indexPath: IndexPath) {
-        let category = dataManager.getCategory(index: indexPath.section)
-        let product = dataManager.getProduct(category: category, index: indexPath.row)
+        let category = modelManager.getCategory(index: indexPath.section)
+        let product = modelManager.getProduct(category: category, index: indexPath.row)
         
-        guard let itemIndex = dataManager.getCheckoutItemIndex(name: product.name!)  else {
+        guard let itemIndex = modelManager.getCheckoutItemIndex(name: product.name!)  else {
             fatalError("There should be a checkout item for \(product.name!)")
         }
         guard let cell = itemsTableView.cellForRow(at: indexPath) as? ItemTableViewCell else {
             fatalError("The cell is not ItemTableViewCell type")
         }
         
-        let checkoutItem = dataManager.getCheckoutItem(index: itemIndex)
+        let checkoutItem = modelManager.getCheckoutItem(index: itemIndex)
         
         // If the current quantity equals max, enable plus button again
         if checkoutItem.quantity == checkoutItem.MAX_QUANTITY {
@@ -281,7 +304,7 @@ extension HomeViewController: UITableViewDelegate {
         // If the current quantity is 1
         if checkoutItem.quantity == 1 {
             // Remove from checkoutItems
-            dataManager.removeCheckoutItem(index: itemIndex)
+            modelManager.removeCheckoutItem(index: itemIndex)
             // Show add button
             cell.addButton.isHidden = false
             // Hide quantityControlView
@@ -289,7 +312,7 @@ extension HomeViewController: UITableViewDelegate {
         } else {
             // Decrease checkoutItem quantity
             checkoutItem.quantity = checkoutItem.quantity-1
-            dataManager.updateCheckoutItems(index: itemIndex, item: checkoutItem)
+            modelManager.updateCheckoutItems(index: itemIndex, item: checkoutItem)
             // Update the quantity label
             cell.quantityLabel.text = String(checkoutItem.quantity)
         }
@@ -313,7 +336,7 @@ extension HomeViewController: UISearchBarDelegate {
         
         // If the search is active then filter the items
         if searchIsActive {
-            let allItems = dataManager.getProducts()
+            let allItems = modelManager.getProducts()
             filteredProducts = allItems.mapValues {
                 // Apply a mapping function over the values of the dictionary
                 (items) in (items.filter {

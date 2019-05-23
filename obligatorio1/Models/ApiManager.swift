@@ -17,35 +17,53 @@ class ApiManager {
     
     private init() {}
     
-    func getProducts() -> [Product]? {
-        var products: [Product]? = nil
-        let url = Constants.API.BASE_URL + Constants.API.GET_PRODUCTS
-        Alamofire.request(url).responseArray { (response: DataResponse<[Product]>) in
-            products = response.result.value
-        }
-        return products
+    private func generateUrlRequest(url: String, method: HTTPMethod) -> URLRequest? {
+        guard let url = URL(string: url) else { return nil }
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = method.rawValue
+        return urlRequest
     }
     
-    func getPromotions() -> [Promotion]? {
-        var promotions: [Promotion]? = nil
+    func getProducts(onCompletion: @escaping ([Product]?, Error?) -> Void) {
+        let url = Constants.API.BASE_URL + Constants.API.GET_PRODUCTS
+        Alamofire.request(url).validate().responseArray { (response: DataResponse<[Product]>) in
+            switch response.result {
+            case .success:
+                onCompletion(response.result.value, nil)
+            case .failure(let error):
+                onCompletion(nil, error)
+            }
+        }
+    }
+    
+    func getPromotions(onCompletion: @escaping ([Promotion]?, Error?) -> Void) {
         let url = Constants.API.BASE_URL + Constants.API.GET_PROMOTIONS
         Alamofire.request(url).responseArray { (response: DataResponse<[Promotion]>) in
-            promotions = response.result.value
+            switch response.result {
+            case .success:
+                onCompletion(response.result.value, nil)
+            case .failure(let error):
+                onCompletion(nil, error)
+            }
         }
-        return promotions
     }
     
-    func getPurchases() -> [Purchase]? {
-        var purchases: [Purchase]? = nil
+    func getPurchases(onCompletion: @escaping ([Purchase]?, Error?) -> Void) {
         let url = Constants.API.BASE_URL + Constants.API.GET_PURCHASES
         Alamofire.request(url).responseArray { (response: DataResponse<[Purchase]>) in
-            purchases = response.result.value
+            switch response.result {
+            case .success:
+                onCompletion(response.result.value, nil)
+            case .failure(let error):
+                onCompletion(nil, error)
+            }
+            
         }
-        return purchases
     }
     
     func postCheckout() -> Bool {
         let url = Constants.API.BASE_URL + Constants.API.POST_CHECKOUT
+        guard let urlRequest = generateUrlRequest(url: url, method: HTTPMethod.post) else { return false }
         // TODO: post with Alamofire
         return false
     }
