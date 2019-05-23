@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class BannerCollectionViewCell: UICollectionViewCell {
     
@@ -19,7 +20,7 @@ class BannerCollectionViewCell: UICollectionViewCell {
     ///
     /// - Parameter banner: banner object to be reflected on the cell
     func configCell(promotion: Promotion) {
-        bannerImageView.image = UIImage(named: promotion.photoUrl!)
+        bannerImageView.kf.setImage(with: URL(string: promotion.photoUrl!))
         bannerImageView.layer.cornerRadius = 5
         nameLabel.text = promotion.name
     }
