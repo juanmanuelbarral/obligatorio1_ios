@@ -42,6 +42,8 @@ struct Constants {
         static let PHOTO_URL_KEY = "photoUrl"
         
         static let CATEGORY_DEFAULT_VALUE = "other"
+        static let PHOTO_URL_DEFAULT_VALUE = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png"
+        static let PHOTO_URL_DEFAULT_VALUE2 = "https://cdn.bulbagarden.net/upload/thumb/4/46/019Rattata.png/250px-019Rattata.png"
     }
     
     // Promotion
@@ -49,6 +51,8 @@ struct Constants {
         static let NAME_KEY = "name"
         static let DESCRIPTION_KEY = "description"
         static let PHOTO_URL_KEY = "photoUrl"
+        
+        static let PHOTO_URL_DEFAULT_VALUE = "https://i.ytimg.com/vi/_wKmFuiBMC8/maxresdefault.jpg"
     }
     
     // Purchase
