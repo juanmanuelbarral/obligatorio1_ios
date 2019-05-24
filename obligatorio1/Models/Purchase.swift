@@ -24,6 +24,7 @@ class Purchase {
     required init?(map: Map) {
         if map.JSON[Constants.Purchase.DATE_KEY] == nil { return nil }
         if map.JSON[Constants.Purchase.PRODUCTS_KEY] == nil { return nil }
+        self.total = calculateTotal()
     }
     
     private func calculateTotal() -> Float {

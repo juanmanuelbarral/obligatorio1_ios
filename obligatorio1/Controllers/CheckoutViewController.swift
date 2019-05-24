@@ -15,7 +15,7 @@ class CheckoutViewController: UIViewController {
     @IBOutlet weak var checkoutButton: UIButton!
     @IBOutlet weak var finalPriceLabel: UILabel!
     
-    private var dataManager = ModelManager.sharedInstance
+    private var modelManager = ModelManager.sharedInstance
     private var pickerChoices: [Int] = [Int](0...10)
     private var selectedOptionPicker = 0
     private var pickerView = UIPickerView(frame: CGRect(x: 5, y: 20, width: 250, height: 140))
@@ -31,10 +31,7 @@ class CheckoutViewController: UIViewController {
         
         // Checkout button style and state
         checkoutButton.layer.cornerRadius = checkoutButton.frame.size.height/2
-        updateStateCheckoutButton()
         
-        // Call function to update total price
-        updateTotalPrice()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -44,6 +41,11 @@ class CheckoutViewController: UIViewController {
             self.navigationController?.navigationBar.prefersLargeTitles = true
         }
         self.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
+        
+        updateStateCheckoutButton()
+        
+        // Call function to update total price
+        updateTotalPrice()
     }
     
     /// Calculates the price of all the items in the cart
@@ -51,7 +53,7 @@ class CheckoutViewController: UIViewController {
     /// - Returns: total price as a Float
     private func calculateTotalPrice() -> Float {
         var totalPrice: Float = 0
-        dataManager.getCheckoutItems().forEach { (item) in
+        modelManager.getCheckoutItems().forEach { (item) in
             totalPrice += Float(item.quantity) * item.product!.price!
         }
         return totalPrice
@@ -64,7 +66,7 @@ class CheckoutViewController: UIViewController {
     
     /// Updates the checkout button appearance and state whether it should be enabled or not
     private func updateStateCheckoutButton() {
-        if dataManager.checkoutItemsIsEmpty() {
+        if modelManager.checkoutItemsIsEmpty() {
             checkoutButton.isEnabled = false
             checkoutButton.layer.backgroundColor = UIColor.lightGray.cgColor
         } else {
@@ -75,25 +77,55 @@ class CheckoutViewController: UIViewController {
     
     // TODO: realizar POST
     @IBAction func checkoutButtonClick(_ sender: Any) {
-        // Show alert that the transaction was succesful
-        let alertController = UIAlertController(title: "Success!", message: "The transaction was successful", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
-            // Empty the checkoutItems
-            self.dataManager.clearCheckoutItems()
+        modelManager.postCheckoutItems { (successMessage, error) in
+            if let error = error {
+                let alertController = UIAlertController(title: "Oops! there was a problem", message: error.localizedDescription, preferredStyle: .alert)
+                let tryAgainAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction) in
+                    print("Cancel button tapped")
+                })
+                alertController.addAction(tryAgainAction)
+                self.present(alertController, animated: true, completion: nil)
+            }
             
-            // Remove self from the navigation stack
-            self.navigationController?.viewControllers.removeLast()
+            if let successMessage = successMessage {
+                self.modelManager.loadPurchases(onCompletion: { (response: [Purchase]?, error: Error?) in
+                    if let error = error {
+                        print(error.localizedDescription)
+                    }
+                    
+                    if let response = response {
+                        print("Las purchases se cargaron bien papá")
+                        self.modelManager.getPurchases().forEach({ (purchase) in
+                            print("\(purchase.date)\n\(purchase.total)")
+                        })
+                        print("\n\n\n\n")
+                        response.forEach({ (purchase) in
+                            print(purchase)
+                        })
+                    }
+                })
+                
+                // Show alert that the transaction was succesful
+                let alertController = UIAlertController(title: "Success!", message: successMessage, preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
+                    // Empty the checkoutItems
+                    self.modelManager.clearCheckoutItems()
+                    
+                    // Remove self from the navigation stack
+                    self.navigationController?.viewControllers.removeLast()
+                }
+                
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            }
         }
-        
-        alertController.addAction(okAction)
-        self.present(alertController, animated: true, completion: nil)
     }
     
 }
 
 extension CheckoutViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataManager.getCheckoutItems().count
+        return modelManager.getCheckoutItems().count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -102,7 +134,7 @@ extension CheckoutViewController: UICollectionViewDataSource {
             fatalError("The dequeued cell is not an instance of CartCollectionViewCell")
         }
         
-        let checkoutItem = dataManager.getCheckoutItem(index: indexPath.row)
+        let checkoutItem = modelManager.getCheckoutItem(index: indexPath.row)
         cell.configCell(checkoutItem: checkoutItem)
         
         return cell
@@ -128,11 +160,11 @@ extension CheckoutViewController: UICollectionViewDelegateFlowLayout {
         let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
             // Change the units for the checkoutItem to the selected option or remove if cero
             if self.selectedOptionPicker != 0 {
-                let changedItem = self.dataManager.getCheckoutItems()[indexPath.row]
+                let changedItem = self.modelManager.getCheckoutItems()[indexPath.row]
                 changedItem.quantity = self.selectedOptionPicker
-                self.dataManager.updateCheckoutItems(index: indexPath.row, item: changedItem)
+                self.modelManager.updateCheckoutItems(index: indexPath.row, item: changedItem)
             } else {
-                self.dataManager.removeCheckoutItem(index: indexPath.row)
+                self.modelManager.removeCheckoutItem(index: indexPath.row)
             }
             
             // Reload the collectionView and calculate the total

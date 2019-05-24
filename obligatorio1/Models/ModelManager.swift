@@ -114,6 +114,24 @@ class ModelManager {
     
     
     // checkoutItems: [CheckoutItem] FUNCTIONS
+    func postCheckoutItems(onCompletion: @escaping (String?, Error?) -> Void) {
+        var cartItemsJSON: [CartItem] = []
+        checkoutItems.forEach { (checkoutItem) in
+            let cartItem = CartItem(id: checkoutItem.product!.id!, quantity: checkoutItem.quantity)
+            cartItemsJSON.append(cartItem)
+        }
+        print(cartItemsJSON.toJSON())
+        apiManager.postCheckout(checkoutItemsJSON: cartItemsJSON.toJSON(), onCompletion: { (response: String?, error: Error?) in
+            if let error = error {
+                onCompletion(nil, error)
+            }
+
+            if let response = response {
+                onCompletion(response, nil)
+            }
+        })
+    }
+    
     func getCheckoutItems() -> [CheckoutItem] {
         return checkoutItems
     }
@@ -176,6 +194,18 @@ class ModelManager {
                 self.purchases = purchasesResponse
                 onCompletion(purchasesResponse, nil)
             }
+        }
+    }
+    
+    func getPurchases() -> [Purchase] {
+        return purchases
+    }
+    
+    func getPurchase(index: Int) -> Purchase {
+        if inRange(index: index, count: purchases.count) {
+            return purchases[index]
+        } else {
+            fatalError("ERROR: index out of range in purchases with index \(index)")
         }
     }
 }

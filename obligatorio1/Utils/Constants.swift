@@ -17,6 +17,9 @@ struct Constants {
         static let GET_PROMOTIONS = "/promoted"
         static let POST_CHECKOUT = "/checkout"
         static let GET_PURCHASES = "/purchases"
+        
+        static let POST_CHECKOUT_KEY = "cart"
+        static let AUTHENTICATION_HEADER_KEY = "Authorization"
     }
     
     // Authentication
