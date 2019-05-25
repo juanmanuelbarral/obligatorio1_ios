@@ -13,8 +13,7 @@ class PurchaseTableViewCell: UITableViewCell {
 //    OUTLETS
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var totalPriceLabel: UILabel!
-    @IBOutlet weak var seeDetailButton: UILabel!
-    
+    @IBOutlet weak var seeDetailButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
