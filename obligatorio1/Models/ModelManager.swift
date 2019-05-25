@@ -15,11 +15,14 @@ class ModelManager {
     static let sharedInstance = ModelManager()
     
     private let apiManager = ApiManager.sharedInstance
+    
     private var productCategories: [String] = []
     private var products: [String:[Product]] = [:]
     private var promotions: [Promotion] = []
     private var checkoutItems: [CheckoutItem] = []
     private var purchases: [Purchase] = []
+    var purchaseCheckoutItemsRO: [CheckoutItem] = []
+    
     
     private init() {}
     

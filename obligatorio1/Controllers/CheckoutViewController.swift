@@ -22,11 +22,11 @@ class CheckoutViewController: UIViewController {
     @IBOutlet weak var checkoutButtonHeight: NSLayoutConstraint!
     @IBOutlet weak var checkoutButtonBottomMargin: NSLayoutConstraint!
     
-    var state: CheckoutState = CheckoutState.NORMAL
     private var modelManager = ModelManager.sharedInstance
     private var pickerChoices: [Int] = [Int](0...10)
     private var selectedOptionPicker = 0
     private var pickerView = UIPickerView(frame: CGRect(x: 5, y: 20, width: 250, height: 140))
+    var state: CheckoutState = CheckoutState.NORMAL
     
     
     override func viewDidLoad() {
@@ -43,8 +43,21 @@ class CheckoutViewController: UIViewController {
     
     
     override func viewWillAppear(_ animated: Bool) {
-        updateNavigationTitle()
-        updateStateCheckoutButton()
+        
+        switch state {
+        case .NORMAL:
+            updateNavigationTitle(title: "Shopping Cart", prefersLargeTitles: true)
+            updateStateCheckoutButton()
+        
+        case .READ_ONLY:
+            updateNavigationTitle(title: "Detail", prefersLargeTitles: true)
+            
+            // checkout button GONE
+            checkoutButton.isHidden = true
+            checkoutButton.isEnabled = false
+            checkoutButtonHeight.constant = 0
+            checkoutButtonBottomMargin.constant = 0
+        }
         
         // Call function to update total price
         updateTotalPrice()
@@ -56,7 +69,10 @@ class CheckoutViewController: UIViewController {
     /// - Returns: total price as a Float
     private func calculateTotalPrice() -> Float {
         var totalPrice: Float = 0
-        modelManager.getCheckoutItems().forEach { (item) in
+        // Depending on the state which checkoutItems use
+        let checkoutItems: [CheckoutItem] = state == .NORMAL ? modelManager.getCheckoutItems() : modelManager.purchaseCheckoutItemsRO
+        
+        checkoutItems.forEach { (item) in
             totalPrice += Float(item.quantity) * item.product!.price!
         }
         return totalPrice
@@ -71,11 +87,11 @@ class CheckoutViewController: UIViewController {
     
     /// Function that updates the title in the navigation top bar
     /// Large title = true for the checkout screen
-    private func updateNavigationTitle() {
+    private func updateNavigationTitle(title: String, prefersLargeTitles: Bool) {
         // Large title
-        self.title = "Shopping cart"
+        self.title = title
         if #available(iOS 11.0, *) {
-            self.navigationController?.navigationBar.prefersLargeTitles = true
+            self.navigationController?.navigationBar.prefersLargeTitles = prefersLargeTitles
         }
         self.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
     }
@@ -90,10 +106,6 @@ class CheckoutViewController: UIViewController {
             checkoutButton.isEnabled = true
             checkoutButton.layer.backgroundColor = UIColor.blue.cgColor
         }
-        checkoutButton.isHidden = true
-        checkoutButtonHeight.constant = 0
-        checkoutButtonBottomMargin.constant = 0
-        
     }
     
     
@@ -129,7 +141,10 @@ class CheckoutViewController: UIViewController {
 
 extension CheckoutViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return modelManager.getCheckoutItems().count
+        // Depending on the state which checkoutItems use
+        let checkoutItems: [CheckoutItem] = state == .NORMAL ? modelManager.getCheckoutItems() : modelManager.purchaseCheckoutItemsRO
+        
+        return checkoutItems.count
     }
     
     
@@ -139,7 +154,9 @@ extension CheckoutViewController: UICollectionViewDataSource {
             fatalError("The dequeued cell is not an instance of CartCollectionViewCell")
         }
         
-        let checkoutItem = modelManager.getCheckoutItem(index: indexPath.row)
+        // Depending on the state which checkoutItem use
+        let checkoutItem = state == .NORMAL ? modelManager.getCheckoutItem(index: indexPath.row) : modelManager.purchaseCheckoutItemsRO[indexPath.row]
+        
         cell.configCell(checkoutItem: checkoutItem)
         
         return cell
@@ -159,31 +176,33 @@ extension CheckoutViewController: UICollectionViewDelegateFlowLayout {
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // Alert with picker
-        let alertController = UIAlertController(title: "Change the units", message: "\n\n\n\n\n\n", preferredStyle: .alert)
-        alertController.view.addSubview(pickerView)
-        
-        let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
-            // Change the units for the checkoutItem to the selected option or remove if cero
-            if self.selectedOptionPicker != 0 {
-                let changedItem = self.modelManager.getCheckoutItems()[indexPath.row]
-                changedItem.quantity = self.selectedOptionPicker
-                self.modelManager.updateCheckoutItems(index: indexPath.row, item: changedItem)
-            } else {
-                self.modelManager.removeCheckoutItem(index: indexPath.row)
+        if state == .NORMAL {
+            // Alert with picker
+            let alertController = UIAlertController(title: "Change the units", message: "\n\n\n\n\n\n", preferredStyle: .alert)
+            alertController.view.addSubview(pickerView)
+            
+            let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
+                // Change the units for the checkoutItem to the selected option or remove if cero
+                if self.selectedOptionPicker != 0 {
+                    let changedItem = self.modelManager.getCheckoutItems()[indexPath.row]
+                    changedItem.quantity = self.selectedOptionPicker
+                    self.modelManager.updateCheckoutItems(index: indexPath.row, item: changedItem)
+                } else {
+                    self.modelManager.removeCheckoutItem(index: indexPath.row)
+                }
+                
+                // Reload the collectionView and calculate the total
+                self.cartCollectionView.reloadData()
+                self.updateTotalPrice()
+                
+                // Check for the checkout button
+                self.updateStateCheckoutButton()
             }
             
-            // Reload the collectionView and calculate the total
-            self.cartCollectionView.reloadData()
-            self.updateTotalPrice()
-            
-            // Check for the checkout button
-            self.updateStateCheckoutButton()
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
         }
-        
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alertController.addAction(okAction)
-        self.present(alertController, animated: true, completion: nil)
     }
 }
 

@@ -38,6 +38,14 @@ class PurchasesViewController: UIViewController {
     }
     
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if let checkoutViewController = segue.destination as? CheckoutViewController {
+            checkoutViewController.state = .READ_ONLY
+        }
+    }
+    
+    
     /// Function that updates the title in the navigation top bar
     /// No tile and large title = false for the home screen
     private func updateNavigationTitle() {
@@ -85,6 +93,8 @@ extension PurchasesViewController: UITableViewDelegate {
     ///
     /// - Parameter indexPath: indexPath from the cell where the button belongs
     private func onSeeDetailClick(indexPath: IndexPath) {
-        //performSegue(withIdentifier: "toCheckoutFromPurchases", sender: nil)
+        let purchase = modelManager.getPurchase(index: indexPath.row)
+        modelManager.purchaseCheckoutItemsRO = purchase.checkoutItems ?? []
+        performSegue(withIdentifier: "toCheckoutFromPurchases", sender: nil)
     }
 }
