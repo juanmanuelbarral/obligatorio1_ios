@@ -21,9 +21,6 @@ class ItemTableViewCell: UITableViewCell {
     @IBOutlet weak var minusButton: UIButton!
     @IBOutlet weak var quantityControlView: UIView!
     
-//    PROPERTIES
-    private var quantity = 0
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
