@@ -44,7 +44,7 @@ class PurchasesViewController: UIViewController {
         // No large title
         self.title = "Purchases"
         if #available(iOS 11.0, *) {
-            self.navigationController?.navigationBar.prefersLargeTitles = false
+            self.navigationController?.navigationBar.prefersLargeTitles = true
         }
         self.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
     }
@@ -85,6 +85,6 @@ extension PurchasesViewController: UITableViewDelegate {
     ///
     /// - Parameter indexPath: indexPath from the cell where the button belongs
     private func onSeeDetailClick(indexPath: IndexPath) {
-        performSegue(withIdentifier: "toCheckoutViewController", sender: nil)
+        //performSegue(withIdentifier: "toCheckoutFromPurchases", sender: nil)
     }
 }

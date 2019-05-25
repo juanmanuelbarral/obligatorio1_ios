@@ -19,7 +19,10 @@ class CheckoutViewController: UIViewController {
     @IBOutlet weak var cartCollectionView: UICollectionView!
     @IBOutlet weak var checkoutButton: UIButton!
     @IBOutlet weak var finalPriceLabel: UILabel!
+    @IBOutlet weak var checkoutButtonHeight: NSLayoutConstraint!
+    @IBOutlet weak var checkoutButtonBottomMargin: NSLayoutConstraint!
     
+    var state: CheckoutState = CheckoutState.NORMAL
     private var modelManager = ModelManager.sharedInstance
     private var pickerChoices: [Int] = [Int](0...10)
     private var selectedOptionPicker = 0
@@ -87,6 +90,10 @@ class CheckoutViewController: UIViewController {
             checkoutButton.isEnabled = true
             checkoutButton.layer.backgroundColor = UIColor.blue.cgColor
         }
+        checkoutButton.isHidden = true
+        checkoutButtonHeight.constant = 0
+        checkoutButtonBottomMargin.constant = 0
+        
     }
     
     

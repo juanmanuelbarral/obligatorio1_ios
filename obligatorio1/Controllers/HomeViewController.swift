@@ -110,7 +110,7 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func cartNavigationButtonClick(_ sender: Any) {
-        performSegue(withIdentifier: "toCheckoutViewController", sender: nil)
+        performSegue(withIdentifier: "toCheckoutFromHome", sender: nil)
     }
     
 }
