@@ -8,6 +8,11 @@
 
 import UIKit
 
+enum CheckoutState {
+    case NORMAL
+    case READ_ONLY
+}
+
 class CheckoutViewController: UIViewController {
 
     // OUTLET
@@ -31,22 +36,17 @@ class CheckoutViewController: UIViewController {
         
         // Checkout button style and state
         checkoutButton.layer.cornerRadius = checkoutButton.frame.size.height/2
-        
     }
     
+    
     override func viewWillAppear(_ animated: Bool) {
-        // Large title
-        self.title = "Shopping cart"
-        if #available(iOS 11.0, *) {
-            self.navigationController?.navigationBar.prefersLargeTitles = true
-        }
-        self.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
-        
+        updateNavigationTitle()
         updateStateCheckoutButton()
         
         // Call function to update total price
         updateTotalPrice()
     }
+    
     
     /// Calculates the price of all the items in the cart
     ///
@@ -59,10 +59,24 @@ class CheckoutViewController: UIViewController {
         return totalPrice
     }
     
+    
     /// Updates the total price label on the view
     private func updateTotalPrice() {
         finalPriceLabel.text = "$\(calculateTotalPrice())"
     }
+    
+    
+    /// Function that updates the title in the navigation top bar
+    /// Large title = true for the checkout screen
+    private func updateNavigationTitle() {
+        // Large title
+        self.title = "Shopping cart"
+        if #available(iOS 11.0, *) {
+            self.navigationController?.navigationBar.prefersLargeTitles = true
+        }
+        self.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
+    }
+    
     
     /// Updates the checkout button appearance and state whether it should be enabled or not
     private func updateStateCheckoutButton() {
@@ -75,36 +89,19 @@ class CheckoutViewController: UIViewController {
         }
     }
     
-    // TODO: realizar POST
+    
     @IBAction func checkoutButtonClick(_ sender: Any) {
         modelManager.postCheckoutItems { (successMessage, error) in
             if let error = error {
                 let alertController = UIAlertController(title: "Oops! there was a problem", message: error.localizedDescription, preferredStyle: .alert)
-                let tryAgainAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction) in
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction) in
                     print("Cancel button tapped")
                 })
-                alertController.addAction(tryAgainAction)
+                alertController.addAction(cancelAction)
                 self.present(alertController, animated: true, completion: nil)
             }
             
             if let successMessage = successMessage {
-                self.modelManager.loadPurchases(onCompletion: { (response: [Purchase]?, error: Error?) in
-                    if let error = error {
-                        print(error.localizedDescription)
-                    }
-                    
-                    if let response = response {
-                        print("Las purchases se cargaron bien papá")
-                        self.modelManager.getPurchases().forEach({ (purchase) in
-                            print("\(purchase.date)\n\(purchase.total)")
-                        })
-                        print("\n\n\n\n")
-                        response.forEach({ (purchase) in
-                            print(purchase)
-                        })
-                    }
-                })
-                
                 // Show alert that the transaction was succesful
                 let alertController = UIAlertController(title: "Success!", message: successMessage, preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
@@ -120,13 +117,14 @@ class CheckoutViewController: UIViewController {
             }
         }
     }
-    
 }
+
 
 extension CheckoutViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return modelManager.getCheckoutItems().count
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
@@ -139,8 +137,8 @@ extension CheckoutViewController: UICollectionViewDataSource {
         
         return cell
     }
-    
 }
+
 
 extension CheckoutViewController: UICollectionViewDelegateFlowLayout {
     
@@ -151,6 +149,7 @@ extension CheckoutViewController: UICollectionViewDelegateFlowLayout {
         let height = width + 80
         return CGSize(width: width, height: height)
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // Alert with picker
@@ -181,18 +180,22 @@ extension CheckoutViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+
 extension CheckoutViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
+    
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return pickerChoices.count
     }
     
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return String(pickerChoices[row])
     }
+    
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         selectedOptionPicker = pickerChoices[row]

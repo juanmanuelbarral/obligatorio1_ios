@@ -33,6 +33,7 @@ class HomeViewController: UIViewController {
         configScrollBanner()
     }
     
+    
     override func viewWillAppear(_ animated: Bool) {
         modelManager.loadProducts { (products: [Product]?, error: Error?) in
             if let error = error {
@@ -55,32 +56,20 @@ class HomeViewController: UIViewController {
             }
         }
         
+        updateNavigationTitle()
         updateStateCartNavigationButton()
-        
+    }
+    
+    
+    /// Function that updates the title in the navigation top bar
+    /// No tile and large title = false for the home screen
+    private func updateNavigationTitle() {
         // No large title
-        self.title = ""
+        //self.title = ""
         if #available(iOS 11.0, *) {
             self.navigationController?.navigationBar.prefersLargeTitles = false
         }
         self.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
-    }
-    
-    /// Function to get the indexPath of the buttons in a cell of a tableView
-    ///
-    /// - Parameters:
-    ///   - element: element selected
-    ///   - tableView: tableView where the element is
-    /// - Returns: the IndexPath of said element in the tableView
-    private func getIndexPath(of element: Any, tableView: UITableView) -> IndexPath?
-    {
-        if let view =  element as? UIView
-        {
-            // Converting to table view coordinate system
-            let pos = view.convert(CGPoint.zero, to: tableView)
-            // Getting the index path according to the converted position
-            return tableView.indexPathForRow(at: pos)
-        }
-        return nil
     }
     
     
@@ -102,20 +91,20 @@ class HomeViewController: UIViewController {
     
     
     @IBAction func addButtonClick(_ sender: Any) {
-        if let indexPath = getIndexPath(of: sender, tableView: itemsTableView) {
+        if let indexPath = ControllerUtils.getIndexPath(of: sender, tableView: itemsTableView) {
             onAddButtonClick(indexPath: indexPath)
         }
     }
     
     @IBAction func plusButtonClick(_ sender: Any) {
-        if let indexPath = getIndexPath(of: sender, tableView: itemsTableView) {
+        if let indexPath = ControllerUtils.getIndexPath(of: sender, tableView: itemsTableView) {
             onPlusButtonClick(indexPath: indexPath)
             
         }
     }
     
     @IBAction func minusButtonClick(_ sender: Any) {
-        if let indexPath = getIndexPath(of: sender, tableView: itemsTableView) {
+        if let indexPath = ControllerUtils.getIndexPath(of: sender, tableView: itemsTableView) {
             onMinusButtonClick(indexPath: indexPath)
         }
     }
@@ -133,6 +122,7 @@ extension HomeViewController: UICollectionViewDataSource {
         return modelManager.getPromotions().count
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = bannerCollectionView.dequeueReusableCell(withReuseIdentifier: "bannerCell", for: indexPath) as? BannerCollectionViewCell else {
             fatalError("The dequeued cell is not an instance of BannerCollectionViewCell")
@@ -143,7 +133,6 @@ extension HomeViewController: UICollectionViewDataSource {
         
         return cell
     }
-    
 }
 
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
@@ -155,11 +144,11 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: width, height: height)
     }
     
+    
     // Function for changing the scroll of the banner
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         scrollBanner.currentPage = indexPath.row
     }
-    
 }
 
 extension HomeViewController: UITableViewDataSource {
@@ -168,10 +157,12 @@ extension HomeViewController: UITableViewDataSource {
         return modelManager.getProducts().count
     }
     
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return modelManager.getCategory(index: section)
     }
-
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let category = modelManager.getCategory(index: section)
         
@@ -191,8 +182,8 @@ extension HomeViewController: UITableViewDataSource {
         return productsInCategory.count
     }
     
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         guard let cell = itemsTableView.dequeueReusableCell(withIdentifier: "itemTableCell", for: indexPath) as? ItemTableViewCell else {
             fatalError("The dequeued cell is not an instance of ItemTableViewCell")
         }
@@ -220,7 +211,6 @@ extension HomeViewController: UITableViewDataSource {
         
         return cell
     }
-    
 }
 
 extension HomeViewController: UITableViewDelegate {
@@ -251,6 +241,7 @@ extension HomeViewController: UITableViewDelegate {
         
     }
     
+    
     /// Function performed when the user taps on the plus button of the tableView cells
     ///
     /// - Parameter indexPath: indexPath from the cell where the button belongs
@@ -279,6 +270,7 @@ extension HomeViewController: UITableViewDelegate {
         // Update the quantity label
         cell.quantityLabel.text = String(checkoutItem.quantity)
     }
+    
     
     /// Function performed when the user taps on the minus button of the tableView cells
     ///
@@ -320,7 +312,6 @@ extension HomeViewController: UITableViewDelegate {
         // Config the cartNavigationButton in case the checkoutItems became empty
         updateStateCartNavigationButton()
     }
-    
 }
 
 
