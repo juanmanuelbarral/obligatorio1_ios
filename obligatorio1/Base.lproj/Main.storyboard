@@ -236,7 +236,7 @@
                         <outlet property="itemsTableView" destination="d0b-IS-Le9" id="k5I-BP-8se"/>
                         <outlet property="scrollBanner" destination="i4F-bB-N5d" id="OEf-JJ-z39"/>
                         <outlet property="searchBar" destination="sdG-jO-6CA" id="7od-Od-XPa"/>
-                        <segue destination="GYx-xl-kIz" kind="show" identifier="toCheckoutViewController" id="2ft-t3-GF3"/>
+                        <segue destination="GYx-xl-kIz" kind="show" identifier="toCheckoutFromHome" id="2ft-t3-GF3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UC1-gf-r4f" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -272,21 +272,21 @@
                                 <rect key="frame" x="0.0" y="64" width="414" height="623"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="purchaseCell" rowHeight="102" id="sQV-KS-GKh" customClass="PurchaseTableViewCell" customModule="obligatorio1" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="102"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="purchaseCell" rowHeight="100" id="sQV-KS-GKh" customClass="PurchaseTableViewCell" customModule="obligatorio1" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sQV-KS-GKh" id="FXx-j7-pm3">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="101.66666666666667"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sQV-KS-GKh" id="FXx-j7-pm3">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="99.666666666666671"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="dd/mm/yyyy hh:mm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="42j-F5-vNL" userLabel="Date">
-                                                    <rect key="frame" x="35" y="21" width="183.66666666666666" height="23"/>
+                                                    <rect key="frame" x="35" y="34.666666666666671" width="183.66666666666666" height="23"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fJM-Xz-Ae8">
-                                                    <rect key="frame" x="279" y="31" width="100" height="40"/>
+                                                    <rect key="frame" x="279" y="41" width="100" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="100" id="0Pv-sC-a8I"/>
                                                         <constraint firstAttribute="height" constant="40" id="IfO-nK-tXW"/>
@@ -295,30 +295,31 @@
                                                     <state key="normal" title="See detail"/>
                                                     <connections>
                                                         <action selector="seeDetailButtonClick:" destination="ptm-4x-SME" eventType="touchUpInside" id="6eI-Ks-aUR"/>
-                                                        <segue destination="GYx-xl-kIz" kind="show" id="H5d-aG-JQx"/>
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="$xxx.xx" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Lo-W3-ZbZ" userLabel="Total Price">
-                                                    <rect key="frame" x="35" y="54" width="58" height="21"/>
+                                                    <rect key="frame" x="35" y="65.666666666666657" width="58" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="42j-F5-vNL" firstAttribute="centerY" secondItem="fJM-Xz-Ae8" secondAttribute="centerY" constant="-15" id="4bK-dZ-jJT"/>
                                                 <constraint firstItem="42j-F5-vNL" firstAttribute="leading" secondItem="FXx-j7-pm3" secondAttribute="leadingMargin" constant="15" id="9Hl-RI-Ugb"/>
-                                                <constraint firstItem="8Lo-W3-ZbZ" firstAttribute="top" secondItem="42j-F5-vNL" secondAttribute="bottom" constant="10" id="EvU-Xc-H8l"/>
                                                 <constraint firstItem="fJM-Xz-Ae8" firstAttribute="centerY" secondItem="FXx-j7-pm3" secondAttribute="centerY" id="Fbu-IL-W4x"/>
-                                                <constraint firstItem="42j-F5-vNL" firstAttribute="top" secondItem="FXx-j7-pm3" secondAttribute="topMargin" constant="10" id="Rku-dG-f1R"/>
+                                                <constraint firstItem="8Lo-W3-ZbZ" firstAttribute="centerY" secondItem="fJM-Xz-Ae8" secondAttribute="centerY" constant="15" id="ZUw-PB-zhB"/>
                                                 <constraint firstItem="fJM-Xz-Ae8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="42j-F5-vNL" secondAttribute="trailing" constant="5" id="bSI-ta-byO"/>
+                                                <constraint firstItem="fJM-Xz-Ae8" firstAttribute="top" secondItem="FXx-j7-pm3" secondAttribute="topMargin" constant="30" id="fTE-Qa-bey"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="fJM-Xz-Ae8" secondAttribute="trailing" constant="15" id="fXP-Cf-eDt"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="fJM-Xz-Ae8" secondAttribute="bottom" constant="30" id="gIA-g1-dTe"/>
                                                 <constraint firstItem="fJM-Xz-Ae8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8Lo-W3-ZbZ" secondAttribute="trailing" constant="5" id="kdO-F0-bbQ"/>
                                                 <constraint firstItem="8Lo-W3-ZbZ" firstAttribute="leading" secondItem="42j-F5-vNL" secondAttribute="leading" id="ocA-aU-4O3"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="dateLabel" destination="42j-F5-vNL" id="DMZ-sL-xjr"/>
-                                            <outlet property="seeDetailButton" destination="8Lo-W3-ZbZ" id="fgN-hJ-hrR"/>
+                                            <outlet property="seeDetailButton" destination="fJM-Xz-Ae8" id="DQ7-lL-Kte"/>
                                             <outlet property="totalPriceLabel" destination="8Lo-W3-ZbZ" id="2ng-i0-6QT"/>
                                         </connections>
                                     </tableViewCell>
@@ -337,6 +338,7 @@
                     <navigationItem key="navigationItem" id="K7l-RP-f9U"/>
                     <connections>
                         <outlet property="purchasesTableView" destination="SbW-E6-oCP" id="MTb-Cp-eML"/>
+                        <segue destination="GYx-xl-kIz" kind="show" identifier="toCheckoutFromPurchases" id="6HG-5M-bCg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MTW-yv-HhT" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -474,6 +476,8 @@
                     <connections>
                         <outlet property="cartCollectionView" destination="1NI-eS-YOO" id="3Bf-7o-28c"/>
                         <outlet property="checkoutButton" destination="avO-yU-CDD" id="mfV-Kq-70A"/>
+                        <outlet property="checkoutButtonBottomMargin" destination="Ppv-lv-va5" id="upg-Bt-Yx6"/>
+                        <outlet property="checkoutButtonHeight" destination="bkR-0j-hJa" id="v3A-Er-DrA"/>
                         <outlet property="finalPriceLabel" destination="fUC-a6-gkc" id="qlH-bA-8Ol"/>
                     </connections>
                 </viewController>
@@ -529,6 +533,6 @@
         <image name="icon-plus" width="12" height="12"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="H5d-aG-JQx"/>
+        <segue reference="6HG-5M-bCg"/>
     </inferredMetricsTieBreakers>
 </document>
