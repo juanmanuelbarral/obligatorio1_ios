@@ -73,7 +73,7 @@ class CheckoutViewController: UIViewController {
         let checkoutItems: [CheckoutItem] = state == .NORMAL ? modelManager.getCheckoutItems() : modelManager.purchaseCheckoutItemsRO
         
         checkoutItems.forEach { (item) in
-            totalPrice += Float(item.quantity) * item.product!.price!
+            totalPrice += Float(item.quantity!) * item.product!.price!
         }
         return totalPrice
     }

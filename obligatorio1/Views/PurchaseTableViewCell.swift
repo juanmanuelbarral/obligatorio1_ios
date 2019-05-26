@@ -33,7 +33,7 @@ class PurchaseTableViewCell: UITableViewCell {
     ///   - item: item to be reflected on the cell
     func configCell(item: Purchase) {
         // Formatting the date and total price
-        dateLabel.text = item.date ?? "Date not found"
+        dateLabel.text = item.date?.description ?? "Date not found"
         totalPriceLabel.text = "$\(item.total)"
         
         // Formatting the seeDetailButton

@@ -13,7 +13,21 @@ class Product {
     
     var id: Int?
     var name: String?
-    var price: Float?
+    var _price: Float?
+    var price: Float? {
+        get {
+            return _price
+        }
+        
+        set(newValue) {
+            // Convert to two decimal spaces
+            if let newValue = newValue {
+                self._price = Float(round(newValue * 100)/100)
+            } else {
+                self._price = newValue
+            }
+        }
+    }
     var category: String?
     var photoUrl: String?
     

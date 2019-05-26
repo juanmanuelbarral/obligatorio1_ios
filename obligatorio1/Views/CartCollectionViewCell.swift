@@ -25,6 +25,6 @@ class CartCollectionViewCell: UICollectionViewCell {
         cartItemImage.layer.cornerRadius = 5
         nameLabel.text = checkoutItem.product!.name
         priceLabel.text = "$\(checkoutItem.product!.price!)"
-        unitsLabel.text = "\(checkoutItem.quantity) units"
+        unitsLabel.text = "\(checkoutItem.quantity!) units"
     }
 }

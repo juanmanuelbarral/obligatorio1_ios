@@ -11,11 +11,11 @@ import ObjectMapper
 
 class Purchase {
     
-    var date: String?
+    var date: Date?
     var checkoutItems: [CheckoutItem]?
     var total: Float = 0
     
-    init(date: String, products: [CheckoutItem]) {
+    init(date: Date, products: [CheckoutItem]) {
         self.date = date
         self.checkoutItems = products
         self.total = calculateTotal()
@@ -32,7 +32,7 @@ class Purchase {
         products.forEach { (item: CheckoutItem) in
             if let product = item.product {
                 let price = product.price ?? 0
-                totalPrice += Float(item.quantity) * price
+                totalPrice += Float(item.quantity!) * price
             }
         }
         return totalPrice
@@ -42,7 +42,7 @@ class Purchase {
 extension Purchase: Mappable {
     
     func mapping(map: Map) {
-        date <- map[Constants.Purchase.DATE_KEY]
+        date <- (map[Constants.Purchase.DATE_KEY], CustomDateTransform())
         checkoutItems <- map[Constants.Purchase.PRODUCTS_KEY]
         total = calculateTotal()
     }

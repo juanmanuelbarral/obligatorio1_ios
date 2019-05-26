@@ -203,7 +203,7 @@ extension HomeViewController: UITableViewDataSource {
         let checkoutItemIndex = modelManager.getCheckoutItemIndex(name: product.name!)
         var units = 0
         if checkoutItemIndex != nil {
-            units = modelManager.getCheckoutItem(index: checkoutItemIndex!).quantity
+            units = modelManager.getCheckoutItem(index: checkoutItemIndex!).quantity!
         }
         
         // Config the cell
@@ -233,7 +233,7 @@ extension HomeViewController: UITableViewDelegate {
         cell.addButton.isHidden = true
         
         // Set quantity label and show quantityControlView
-        cell.quantityLabel.text = String(newCheckoutItem.quantity)
+        cell.quantityLabel.text = String(newCheckoutItem.quantity!)
         cell.quantityControlView.isHidden = false
         
         // Config the cartNavigationButton in case it was disabled
@@ -259,16 +259,16 @@ extension HomeViewController: UITableViewDelegate {
         let checkoutItem = modelManager.getCheckoutItem(index: itemIndex)
         
         // Check if we are going to reach the maximum quantity (or already the maximum)
-        if checkoutItem.quantity >= (checkoutItem.MAX_QUANTITY-1) {
+        if checkoutItem.quantity! >= (checkoutItem.MAX_QUANTITY-1) {
             // Disable plus button so they can't go over the maximum
             cell.plusButton.isEnabled = false
         }
         
         // Increase the checkoutItem quantity
-        checkoutItem.quantity = checkoutItem.quantity+1
+        checkoutItem.quantity! = checkoutItem.quantity!+1
         modelManager.updateCheckoutItems(index: itemIndex, item: checkoutItem)
         // Update the quantity label
-        cell.quantityLabel.text = String(checkoutItem.quantity)
+        cell.quantityLabel.text = String(checkoutItem.quantity!)
     }
     
     
@@ -303,10 +303,10 @@ extension HomeViewController: UITableViewDelegate {
             cell.quantityControlView.isHidden = true
         } else {
             // Decrease checkoutItem quantity
-            checkoutItem.quantity = checkoutItem.quantity-1
+            checkoutItem.quantity = checkoutItem.quantity!-1
             modelManager.updateCheckoutItems(index: itemIndex, item: checkoutItem)
             // Update the quantity label
-            cell.quantityLabel.text = String(checkoutItem.quantity)
+            cell.quantityLabel.text = String(checkoutItem.quantity!)
         }
         
         // Config the cartNavigationButton in case the checkoutItems became empty

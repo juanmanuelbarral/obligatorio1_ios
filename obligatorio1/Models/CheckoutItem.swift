@@ -15,8 +15,8 @@ class CheckoutItem {
     let MAX_QUANTITY = Constants.CheckoutItem.MAX_QUANTITY
     
     var product: Product?
-    private var _quantity: Int = 0
-    var quantity: Int {
+    private var _quantity: Int? = 0
+    var quantity: Int? {
         get {
             return _quantity
         }
@@ -24,13 +24,18 @@ class CheckoutItem {
         set(newValue) {
             // According to what was said in class units are limited between 0 and 10
             // The setter controls these border issues
-            if newValue < MIN_QUANTITY {
-                self._quantity = MIN_QUANTITY
-            } else if newValue > MAX_QUANTITY {
-                self._quantity = MAX_QUANTITY
+            if let newValue = newValue {
+                if newValue < MIN_QUANTITY {
+                    self._quantity = MIN_QUANTITY
+                } else if newValue > MAX_QUANTITY {
+                    self._quantity = MAX_QUANTITY
+                } else {
+                    self._quantity = newValue
+                }
             } else {
                 self._quantity = newValue
             }
+            
         }
     }
     

@@ -120,7 +120,7 @@ class ModelManager {
     func postCheckoutItems(onCompletion: @escaping (String?, Error?) -> Void) {
         var cartItemsJSON: [CartItem] = []
         checkoutItems.forEach { (checkoutItem) in
-            let cartItem = CartItem(id: checkoutItem.product!.id!, quantity: checkoutItem.quantity)
+            let cartItem = CartItem(id: checkoutItem.product!.id!, quantity: checkoutItem.quantity!)
             cartItemsJSON.append(cartItem)
         }
         print(cartItemsJSON.toJSON())
