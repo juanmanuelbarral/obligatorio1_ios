@@ -59,7 +59,7 @@ class PurchasesViewController: UIViewController {
     
 
     @IBAction func seeDetailButtonClick(_ sender: Any) {
-        if let indexPath = ControllerUtils.getIndexPath(of: sender, tableView: purchasesTableView) {
+        if let indexPath = Utils.getIndexPath(of: sender, tableView: purchasesTableView) {
             onSeeDetailClick(indexPath: indexPath)
         }
     }

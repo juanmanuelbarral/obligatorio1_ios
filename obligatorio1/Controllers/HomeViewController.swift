@@ -91,20 +91,20 @@ class HomeViewController: UIViewController {
     
     
     @IBAction func addButtonClick(_ sender: Any) {
-        if let indexPath = ControllerUtils.getIndexPath(of: sender, tableView: itemsTableView) {
+        if let indexPath = Utils.getIndexPath(of: sender, tableView: itemsTableView) {
             onAddButtonClick(indexPath: indexPath)
         }
     }
     
     @IBAction func plusButtonClick(_ sender: Any) {
-        if let indexPath = ControllerUtils.getIndexPath(of: sender, tableView: itemsTableView) {
+        if let indexPath = Utils.getIndexPath(of: sender, tableView: itemsTableView) {
             onPlusButtonClick(indexPath: indexPath)
             
         }
     }
     
     @IBAction func minusButtonClick(_ sender: Any) {
-        if let indexPath = ControllerUtils.getIndexPath(of: sender, tableView: itemsTableView) {
+        if let indexPath = Utils.getIndexPath(of: sender, tableView: itemsTableView) {
             onMinusButtonClick(indexPath: indexPath)
         }
     }

@@ -1,5 +1,5 @@
 //
-//  ControllerUtils.swift
+//  Utils.swift
 //  obligatorio1
 //
 //  Created by Manu on 25/5/19.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class ControllerUtils {
+class Utils {
     
     /// Function to get the indexPath of the buttons in a cell of a tableView
     ///
@@ -27,5 +27,23 @@ class ControllerUtils {
             return tableView.indexPathForRow(at: pos)
         }
         return nil
+    }
+    
+    /// Function that updates the title in the navigation top bar
+    /// Large title = true for the checkout screen
+    static func updateNavigationTitle(element: UIViewController, title: String, prefersLargeTitles: Bool) {
+        // Large title
+        element.title = title
+        if #available(iOS 11.0, *) {
+            element.navigationController?.navigationBar.prefersLargeTitles = prefersLargeTitles
+        }
+        element.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
+    }
+    
+    static func dateToString(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+        return dateFormatter.string(from: date)
     }
 }
