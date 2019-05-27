@@ -37,6 +37,24 @@ class Purchase {
         }
         return totalPrice
     }
+    
+    
+    func dateDayToString(dayFormat: DateFormatter.Style) -> String? {
+        return dateToString(dayFormat: dayFormat, timeFormat: .none)
+    }
+    
+    
+    func dateTimeToString(timeFormat: DateFormatter.Style) -> String? {
+        return dateToString(dayFormat: .none, timeFormat: timeFormat)
+    }
+    
+    func dateToString(dayFormat: DateFormatter.Style, timeFormat: DateFormatter.Style) -> String? {
+        guard let date = self.date else { return nil }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = dayFormat
+        dateFormatter.timeStyle = timeFormat
+        return dateFormatter.string(from: date)
+    }
 }
 
 extension Purchase: Mappable {

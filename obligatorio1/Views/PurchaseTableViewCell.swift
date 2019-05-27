@@ -11,9 +11,10 @@ import UIKit
 class PurchaseTableViewCell: UITableViewCell {
 
 //    OUTLETS
-    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var dateDayLabel: UILabel!
+    @IBOutlet weak var dateHourLabel: UILabel!
     @IBOutlet weak var totalPriceLabel: UILabel!
-    @IBOutlet weak var seeDetailButton: UIButton!
+    @IBOutlet weak var detailButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -33,13 +34,14 @@ class PurchaseTableViewCell: UITableViewCell {
     ///   - item: item to be reflected on the cell
     func configCell(item: Purchase) {
         // Formatting the date and total price
-        dateLabel.text = Utils.dateToString(date: item.date!)
+        dateDayLabel.text = item.dateDayToString(dayFormat: .medium) ?? "Date not found"
+        dateHourLabel.text = item.dateTimeToString(timeFormat: .short) ?? ""
         totalPriceLabel.text = "$\(item.total)"
         
         // Formatting the seeDetailButton
-        seeDetailButton.layer.cornerRadius = 20
-        seeDetailButton.layer.borderColor = UIColor.blue.cgColor
-        seeDetailButton.layer.borderWidth = 1
+        detailButton.layer.cornerRadius = 20
+        detailButton.layer.borderColor = UIColor.blue.cgColor
+        detailButton.layer.borderWidth = 1
         
         // Formating the cell
         // setting selection style to none so the cell doesn't turn gray or blue when touching it

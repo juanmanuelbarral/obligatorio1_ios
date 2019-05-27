@@ -39,11 +39,4 @@ class Utils {
         }
         element.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
     }
-    
-    static func dateToString(date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .short
-        return dateFormatter.string(from: date)
-    }
 }

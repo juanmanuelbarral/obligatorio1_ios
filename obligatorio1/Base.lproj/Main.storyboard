@@ -268,58 +268,65 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="SbW-E6-oCP">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="SbW-E6-oCP">
                                 <rect key="frame" x="0.0" y="64" width="414" height="623"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="purchaseCell" rowHeight="100" id="sQV-KS-GKh" customClass="PurchaseTableViewCell" customModule="obligatorio1" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sQV-KS-GKh" id="FXx-j7-pm3">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sQV-KS-GKh" id="FXx-j7-pm3">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="99.666666666666671"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="dd/mm/yyyy hh:mm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="42j-F5-vNL" userLabel="Date">
-                                                    <rect key="frame" x="35" y="34.666666666666671" width="183.66666666666666" height="23"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="dd/mm/yyyy" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="42j-F5-vNL" userLabel="Date Day">
+                                                    <rect key="frame" x="35.000000000000007" y="24" width="109.66666666666669" height="21.666666666666671"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fJM-Xz-Ae8">
-                                                    <rect key="frame" x="279" y="41" width="100" height="40"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="hh:mm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2ds-oh-8zZ" userLabel="Date Hour">
+                                                    <rect key="frame" x="159.66666666666666" y="27.000000000000004" width="41.666666666666657" height="15.666666666666668"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fJM-Xz-Ae8" userLabel="Detail Button">
+                                                    <rect key="frame" x="299" y="30" width="80" height="40"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="100" id="0Pv-sC-a8I"/>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="0Pv-sC-a8I"/>
                                                         <constraint firstAttribute="height" constant="40" id="IfO-nK-tXW"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                                    <state key="normal" title="See detail"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <state key="normal" title="Detail"/>
                                                     <connections>
-                                                        <action selector="seeDetailButtonClick:" destination="ptm-4x-SME" eventType="touchUpInside" id="6eI-Ks-aUR"/>
+                                                        <action selector="detailButtonClick:" destination="ptm-4x-SME" eventType="touchUpInside" id="6eI-Ks-aUR"/>
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="$xxx.xx" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Lo-W3-ZbZ" userLabel="Total Price">
-                                                    <rect key="frame" x="35" y="65.666666666666657" width="58" height="21"/>
+                                                    <rect key="frame" x="35" y="54.333333333333343" width="58" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="42j-F5-vNL" firstAttribute="centerY" secondItem="fJM-Xz-Ae8" secondAttribute="centerY" constant="-15" id="4bK-dZ-jJT"/>
+                                                <constraint firstItem="8Lo-W3-ZbZ" firstAttribute="centerY" secondItem="FXx-j7-pm3" secondAttribute="centerY" constant="15" id="0Ha-qO-Bhe"/>
+                                                <constraint firstItem="42j-F5-vNL" firstAttribute="centerY" secondItem="FXx-j7-pm3" secondAttribute="centerY" constant="-15" id="6C7-MK-FUE"/>
                                                 <constraint firstItem="42j-F5-vNL" firstAttribute="leading" secondItem="FXx-j7-pm3" secondAttribute="leadingMargin" constant="15" id="9Hl-RI-Ugb"/>
                                                 <constraint firstItem="fJM-Xz-Ae8" firstAttribute="centerY" secondItem="FXx-j7-pm3" secondAttribute="centerY" id="Fbu-IL-W4x"/>
-                                                <constraint firstItem="8Lo-W3-ZbZ" firstAttribute="centerY" secondItem="fJM-Xz-Ae8" secondAttribute="centerY" constant="15" id="ZUw-PB-zhB"/>
-                                                <constraint firstItem="fJM-Xz-Ae8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="42j-F5-vNL" secondAttribute="trailing" constant="5" id="bSI-ta-byO"/>
-                                                <constraint firstItem="fJM-Xz-Ae8" firstAttribute="top" secondItem="FXx-j7-pm3" secondAttribute="topMargin" constant="30" id="fTE-Qa-bey"/>
+                                                <constraint firstItem="2ds-oh-8zZ" firstAttribute="leading" secondItem="42j-F5-vNL" secondAttribute="trailing" constant="15" id="K8l-fI-MFP"/>
+                                                <constraint firstItem="2ds-oh-8zZ" firstAttribute="centerY" secondItem="42j-F5-vNL" secondAttribute="centerY" id="MqF-UW-aYc"/>
+                                                <constraint firstItem="fJM-Xz-Ae8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="2ds-oh-8zZ" secondAttribute="trailing" constant="5" id="bSI-ta-byO"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="fJM-Xz-Ae8" secondAttribute="trailing" constant="15" id="fXP-Cf-eDt"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="fJM-Xz-Ae8" secondAttribute="bottom" constant="30" id="gIA-g1-dTe"/>
                                                 <constraint firstItem="fJM-Xz-Ae8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8Lo-W3-ZbZ" secondAttribute="trailing" constant="5" id="kdO-F0-bbQ"/>
                                                 <constraint firstItem="8Lo-W3-ZbZ" firstAttribute="leading" secondItem="42j-F5-vNL" secondAttribute="leading" id="ocA-aU-4O3"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="dateLabel" destination="42j-F5-vNL" id="DMZ-sL-xjr"/>
-                                            <outlet property="seeDetailButton" destination="fJM-Xz-Ae8" id="DQ7-lL-Kte"/>
+                                            <outlet property="dateDayLabel" destination="42j-F5-vNL" id="PPS-mA-U76"/>
+                                            <outlet property="dateHourLabel" destination="2ds-oh-8zZ" id="RtB-w0-MEV"/>
+                                            <outlet property="detailButton" destination="fJM-Xz-Ae8" id="ZvW-tf-m4f"/>
                                             <outlet property="totalPriceLabel" destination="8Lo-W3-ZbZ" id="2ng-i0-6QT"/>
                                         </connections>
                                     </tableViewCell>
