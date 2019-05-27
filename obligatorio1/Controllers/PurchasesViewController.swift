@@ -12,20 +12,25 @@ class PurchasesViewController: UIViewController {
 
     @IBOutlet weak var purchasesTableView: UITableView!
     
-    let modelManager = ModelManager.sharedInstance
+    private var modelManager = ModelManager.sharedInstance
+    private var vcUtils = Utils()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         purchasesTableView.dataSource = self
         purchasesTableView.delegate = self
+        
+        // start loader
+        vcUtils.showActivityIndicatory(uiView: self.view)
     }
     
     
     override func viewWillAppear(_ animated: Bool) {
-        // TODO: start loader
         modelManager.loadPurchases(onCompletion: { (purchases: [Purchase]?, error: Error?) in
-            // TODO: stop loader
+            // stop loader
+            self.vcUtils.hideActivityIndicator(uiView: self.view)
+            
             if let error = error {
                 // TODO: show error
                 print("There was a problem with the Products. ERROR: \(error.localizedDescription)")
@@ -36,7 +41,7 @@ class PurchasesViewController: UIViewController {
             }
         })
         
-        Utils.updateNavigationTitle(element: self, title: "Purchases", prefersLargeTitles: true)
+        vcUtils.updateNavigationTitle(element: self, title: "Purchases", prefersLargeTitles: true)
     }
     
     
@@ -48,7 +53,7 @@ class PurchasesViewController: UIViewController {
     
 
     @IBAction func detailButtonClick(_ sender: Any) {
-        if let indexPath = Utils.getIndexPath(of: sender, tableView: purchasesTableView) {
+        if let indexPath = vcUtils.getIndexPath(of: sender, tableView: purchasesTableView) {
             onSeeDetailClick(indexPath: indexPath)
         }
     }

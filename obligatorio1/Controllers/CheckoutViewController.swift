@@ -23,6 +23,7 @@ class CheckoutViewController: UIViewController {
     @IBOutlet weak var checkoutButtonBottomMargin: NSLayoutConstraint!
     
     private var modelManager = ModelManager.sharedInstance
+    private var vcUtils = Utils()
     private var pickerChoices: [Int] = [Int](0...10)
     private var selectedOptionPicker = 0
     private var pickerView = UIPickerView(frame: CGRect(x: 5, y: 20, width: 250, height: 140))
@@ -46,11 +47,11 @@ class CheckoutViewController: UIViewController {
         
         switch state {
         case .NORMAL:
-            Utils.updateNavigationTitle(element: self, title: "Shopping Cart", prefersLargeTitles: true)
+            vcUtils.updateNavigationTitle(element: self, title: "Shopping Cart", prefersLargeTitles: true)
             updateStateCheckoutButton()
         
         case .READ_ONLY:
-            Utils.updateNavigationTitle(element: self, title: "Detail", prefersLargeTitles: true)
+            vcUtils.updateNavigationTitle(element: self, title: "Detail", prefersLargeTitles: true)
             
             // checkout button GONE
             checkoutButton.isHidden = true
@@ -100,9 +101,13 @@ class CheckoutViewController: UIViewController {
     
     
     @IBAction func checkoutButtonClick(_ sender: Any) {
-        // TODO: start loader
+        // start loader
+        vcUtils.showActivityIndicatory(uiView: self.view)
+        
         modelManager.postCheckoutItems { (successMessage, error) in
-            // TODO: stop loader
+            // stop loader
+            self.vcUtils.hideActivityIndicator(uiView: self.view)
+            
             if let error = error {
                 let alertController = UIAlertController(title: "Oops! there was a problem", message: error.localizedDescription, preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction) in

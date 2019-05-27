@@ -17,7 +17,8 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var cartNavigationButton: UIBarButtonItem!
     @IBOutlet weak var searchBar: UISearchBar!
     
-    var modelManager = ModelManager.sharedInstance
+    private var modelManager = ModelManager.sharedInstance
+    private var vcUtils = Utils()
     var filteredProducts: [String:[Product]] = [:]
     var searchIsActive = false
     
@@ -31,13 +32,17 @@ class HomeViewController: UIViewController {
         searchBar.delegate = self
         
         configScrollBanner()
+        
+        // start loader
+        vcUtils.showActivityIndicatory(uiView: self.view)
     }
     
     
     override func viewWillAppear(_ animated: Bool) {
-        // TODO: start loader
         modelManager.loadProducts { (products: [Product]?, error: Error?) in
-            // TODO: stop loader
+            // stop loader
+            self.vcUtils.hideActivityIndicator(uiView: self.view)
+            
             if let error = error {
                 // TODO: show error
                 print("There was a problem with the Products. ERROR: \(error.localizedDescription)")
@@ -86,19 +91,19 @@ class HomeViewController: UIViewController {
     
     
     @IBAction func addButtonClick(_ sender: Any) {
-        if let indexPath = Utils.getIndexPath(of: sender, tableView: itemsTableView) {
+        if let indexPath = vcUtils.getIndexPath(of: sender, tableView: itemsTableView) {
             onAddButtonClick(indexPath: indexPath)
         }
     }
     
     @IBAction func plusButtonClick(_ sender: Any) {
-        if let indexPath = Utils.getIndexPath(of: sender, tableView: itemsTableView) {
+        if let indexPath = vcUtils.getIndexPath(of: sender, tableView: itemsTableView) {
             onPlusButtonClick(indexPath: indexPath)
         }
     }
     
     @IBAction func minusButtonClick(_ sender: Any) {
-        if let indexPath = Utils.getIndexPath(of: sender, tableView: itemsTableView) {
+        if let indexPath = vcUtils.getIndexPath(of: sender, tableView: itemsTableView) {
             onMinusButtonClick(indexPath: indexPath)
         }
     }
