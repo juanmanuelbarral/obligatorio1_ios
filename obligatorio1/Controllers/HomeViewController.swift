@@ -44,7 +44,8 @@ class HomeViewController: UIViewController {
             self.vcUtils.hideActivityIndicator(uiView: self.view)
             
             if let error = error {
-                // TODO: show error
+                let errorAlert = self.vcUtils.errorAlert(title: "Oops! something went wrong", message: "There was a problem loading the products, check that you are online")
+                self.present(errorAlert, animated: true, completion: nil)
                 print("There was a problem with the Products. ERROR: \(error.localizedDescription)")
             }
             if products != nil {
@@ -54,7 +55,8 @@ class HomeViewController: UIViewController {
         
         modelManager.loadPromotions { (promotions: [Promotion]?, error: Error?) in
             if let error = error {
-                // TODO: show error
+                let errorAlert = self.vcUtils.errorAlert(title: "Oops! something went wrong", message: "There was a problem loading the promotions, check that you are online")
+                self.present(errorAlert, animated: true, completion: nil)
                 print("There was a problem with the Promotions. ERROR: \(error.localizedDescription)")
             }
             if promotions != nil {

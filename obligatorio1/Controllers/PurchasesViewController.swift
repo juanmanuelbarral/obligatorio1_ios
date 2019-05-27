@@ -32,8 +32,9 @@ class PurchasesViewController: UIViewController {
             self.vcUtils.hideActivityIndicator(uiView: self.view)
             
             if let error = error {
-                // TODO: show error
-                print("There was a problem with the Products. ERROR: \(error.localizedDescription)")
+                let errorAlert = self.vcUtils.errorAlert(title: "Oops! something went wrong", message: "There was a problem loading your purchase history, check that you are online")
+                self.present(errorAlert, animated: true, completion: nil)
+                print("There was a problem with the Purchases. ERROR: \(error.localizedDescription)")
             }
             
             if purchases != nil {

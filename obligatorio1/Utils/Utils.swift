@@ -47,6 +47,22 @@ class Utils {
     }
     
     
+    /// Function that creates an error message
+    ///
+    /// - Parameters:
+    ///   - title: title for the alert
+    ///   - message: message to be displayed in the alert
+    /// - Returns: the UIAlertController
+    func errorAlert(title: String, message: String) -> UIAlertController {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction) in
+            print("Cancel button tapped")
+        })
+        alertController.addAction(cancelAction)
+        return alertController
+    }
+    
+    
     /// Show customized activity indicator,actually add activity indicator to passing view
     ///
     /// - Parameter uiView: add activity indicator to this view

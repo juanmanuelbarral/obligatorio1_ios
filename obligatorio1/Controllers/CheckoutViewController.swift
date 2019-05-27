@@ -109,12 +109,8 @@ class CheckoutViewController: UIViewController {
             self.vcUtils.hideActivityIndicator(uiView: self.view)
             
             if let error = error {
-                let alertController = UIAlertController(title: "Oops! there was a problem", message: error.localizedDescription, preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction) in
-                    print("Cancel button tapped")
-                })
-                alertController.addAction(cancelAction)
-                self.present(alertController, animated: true, completion: nil)
+                let errorAlert = self.vcUtils.errorAlert(title: "Oops! something went wrong", message: error.localizedDescription)
+                self.present(errorAlert, animated: true, completion: nil)
             }
             
             if let successMessage = successMessage {
