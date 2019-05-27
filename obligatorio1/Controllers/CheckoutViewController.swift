@@ -46,11 +46,11 @@ class CheckoutViewController: UIViewController {
         
         switch state {
         case .NORMAL:
-            updateNavigationTitle(title: "Shopping Cart", prefersLargeTitles: true)
+            Utils.updateNavigationTitle(element: self, title: "Shopping Cart", prefersLargeTitles: true)
             updateStateCheckoutButton()
         
         case .READ_ONLY:
-            updateNavigationTitle(title: "Detail", prefersLargeTitles: true)
+            Utils.updateNavigationTitle(element: self, title: "Detail", prefersLargeTitles: true)
             
             // checkout button GONE
             checkoutButton.isHidden = true
@@ -85,18 +85,6 @@ class CheckoutViewController: UIViewController {
     }
     
     
-    /// Function that updates the title in the navigation top bar
-    /// Large title = true for the checkout screen
-    private func updateNavigationTitle(title: String, prefersLargeTitles: Bool) {
-        // Large title
-        self.title = title
-        if #available(iOS 11.0, *) {
-            self.navigationController?.navigationBar.prefersLargeTitles = prefersLargeTitles
-        }
-        self.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
-    }
-    
-    
     /// Updates the checkout button appearance and state whether it should be enabled or not
     private func updateStateCheckoutButton() {
         if modelManager.checkoutItemsIsEmpty() {
@@ -110,7 +98,9 @@ class CheckoutViewController: UIViewController {
     
     
     @IBAction func checkoutButtonClick(_ sender: Any) {
+        // TODO: start loader
         modelManager.postCheckoutItems { (successMessage, error) in
+            // TODO: stop loader
             if let error = error {
                 let alertController = UIAlertController(title: "Oops! there was a problem", message: error.localizedDescription, preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction) in

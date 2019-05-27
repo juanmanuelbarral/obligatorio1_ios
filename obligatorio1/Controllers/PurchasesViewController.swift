@@ -23,7 +23,9 @@ class PurchasesViewController: UIViewController {
     
     
     override func viewWillAppear(_ animated: Bool) {
+        // TODO: start loader
         modelManager.loadPurchases(onCompletion: { (purchases: [Purchase]?, error: Error?) in
+            // TODO: stop loader
             if let error = error {
                 // TODO: show error
                 print("There was a problem with the Products. ERROR: \(error.localizedDescription)")
@@ -34,27 +36,14 @@ class PurchasesViewController: UIViewController {
             }
         })
         
-        updateNavigationTitle()
+        Utils.updateNavigationTitle(element: self, title: "Purchases", prefersLargeTitles: true)
     }
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         if let checkoutViewController = segue.destination as? CheckoutViewController {
             checkoutViewController.state = .READ_ONLY
         }
-    }
-    
-    
-    /// Function that updates the title in the navigation top bar
-    /// No tile and large title = false for the home screen
-    private func updateNavigationTitle() {
-        // No large title
-        self.title = "Purchases"
-        if #available(iOS 11.0, *) {
-            self.navigationController?.navigationBar.prefersLargeTitles = true
-        }
-        self.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
     }
     
 

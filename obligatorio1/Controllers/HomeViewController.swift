@@ -35,7 +35,9 @@ class HomeViewController: UIViewController {
     
     
     override func viewWillAppear(_ animated: Bool) {
+        // TODO: start loader
         modelManager.loadProducts { (products: [Product]?, error: Error?) in
+            // TODO: stop loader
             if let error = error {
                 // TODO: show error
                 print("There was a problem with the Products. ERROR: \(error.localizedDescription)")
@@ -56,20 +58,13 @@ class HomeViewController: UIViewController {
             }
         }
         
-        updateNavigationTitle()
-        updateStateCartNavigationButton()
-    }
-    
-    
-    /// Function that updates the title in the navigation top bar
-    /// No tile and large title = false for the home screen
-    private func updateNavigationTitle() {
-        // No large title
-        //self.title = ""
+        // No large titles in home view
         if #available(iOS 11.0, *) {
             self.navigationController?.navigationBar.prefersLargeTitles = false
         }
         self.navigationController?.navigationBar.backgroundColor = UIColor(red: 249, green: 249, blue: 249, alpha: 1)
+        
+        updateStateCartNavigationButton()
     }
     
     
@@ -99,7 +94,6 @@ class HomeViewController: UIViewController {
     @IBAction func plusButtonClick(_ sender: Any) {
         if let indexPath = Utils.getIndexPath(of: sender, tableView: itemsTableView) {
             onPlusButtonClick(indexPath: indexPath)
-            
         }
     }
     
@@ -135,6 +129,7 @@ extension HomeViewController: UICollectionViewDataSource {
     }
 }
 
+
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -151,6 +146,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+
 extension HomeViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -166,15 +162,8 @@ extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let category = modelManager.getCategory(index: section)
         
-        // Use all of the items or the filtered items
-        var products: [String: [Product]]
-        if searchIsActive {
-            // Use the filtered products
-            products = filteredProducts
-        } else {
-            // Use all of the products
-            products = modelManager.getProducts()
-        }
+        // Use all of the products or the filtered products
+        var products: [String: [Product]] = searchIsActive ? filteredProducts : modelManager.getProducts()
         
         guard let productsInCategory = products[category] else {
             return 0
@@ -190,21 +179,11 @@ extension HomeViewController: UITableViewDataSource {
         
         // Obtain the product to config the cell
         let category = modelManager.getCategory(index: indexPath.section)
-        var product: Product
-        if searchIsActive {
-            // Use the filtered products
-            product = filteredProducts[category]![indexPath.row]
-        } else {
-            // Use all of the products
-            product = modelManager.getProduct(category: category, index: indexPath.row)
-        }
+        let product: Product = searchIsActive ? filteredProducts[category]![indexPath.row] : modelManager.getProduct(category: category, index: indexPath.row)
         
         // Check if that item has units in the cart
         let checkoutItemIndex = modelManager.getCheckoutItemIndex(name: product.name!)
-        var units = 0
-        if checkoutItemIndex != nil {
-            units = modelManager.getCheckoutItem(index: checkoutItemIndex!).quantity!
-        }
+        let units = checkoutItemIndex != nil ? modelManager.getCheckoutItem(index: checkoutItemIndex!).quantity! : 0
         
         // Config the cell
         cell.configCell(item: product, units: units)
@@ -212,6 +191,7 @@ extension HomeViewController: UITableViewDataSource {
         return cell
     }
 }
+
 
 extension HomeViewController: UITableViewDelegate {
     
