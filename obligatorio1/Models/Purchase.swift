@@ -31,8 +31,9 @@ class Purchase {
         guard let products = checkoutItems else { return totalPrice }
         products.forEach { (item: CheckoutItem) in
             if let product = item.product {
+                let quantity = item.quantity ?? 0
                 let price = product.price ?? 0
-                totalPrice += Float(item.quantity!) * price
+                totalPrice += Float(quantity) * price
             }
         }
         return totalPrice
