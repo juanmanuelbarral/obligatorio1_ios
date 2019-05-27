@@ -1,5 +1,5 @@
 //
-//  Utils.swift
+//  ViewControllerUtils.swift
 //  obligatorio1
 //
 //  Created by Manu on 25/5/19.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class Utils {
+class ViewControllerUtils {
     
     private var container: UIView = UIView()
     private var loadingView: UIView = UIView()

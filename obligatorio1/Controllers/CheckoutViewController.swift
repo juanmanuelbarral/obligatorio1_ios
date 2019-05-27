@@ -23,7 +23,7 @@ class CheckoutViewController: UIViewController {
     @IBOutlet weak var checkoutButtonBottomMargin: NSLayoutConstraint!
     
     private var modelManager = ModelManager.sharedInstance
-    private var vcUtils = Utils()
+    private var vcUtils = ViewControllerUtils()
     private var pickerChoices: [Int] = [Int](0...10)
     private var selectedOptionPicker = 0
     private var pickerView = UIPickerView(frame: CGRect(x: 5, y: 20, width: 250, height: 140))

@@ -13,7 +13,7 @@ class PurchasesViewController: UIViewController {
     @IBOutlet weak var purchasesTableView: UITableView!
     
     private var modelManager = ModelManager.sharedInstance
-    private var vcUtils = Utils()
+    private var vcUtils = ViewControllerUtils()
     
     override func viewDidLoad() {
         super.viewDidLoad()

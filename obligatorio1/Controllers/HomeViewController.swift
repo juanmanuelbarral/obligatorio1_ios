@@ -18,7 +18,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     
     private var modelManager = ModelManager.sharedInstance
-    private var vcUtils = Utils()
+    private var vcUtils = ViewControllerUtils()
     var filteredProducts: [String:[Product]] = [:]
     var searchIsActive = false
     
