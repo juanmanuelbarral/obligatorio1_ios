@@ -75,9 +75,10 @@ class CheckoutViewController: UIViewController {
         
         checkoutItems.forEach { (item) in
             let itemQuantity = item.quantity ?? 0
-            let itemPrice: Float = item.product?.price ?? 0
+            let itemPrice: Float = item.product!.price ?? 0
             totalPrice += Float(itemQuantity) * itemPrice
         }
+        totalPrice = Float(round(totalPrice * 100)/100)
         return totalPrice
     }
     

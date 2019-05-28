@@ -36,6 +36,7 @@ class Purchase {
                 totalPrice += Float(quantity) * price
             }
         }
+        totalPrice = Float(round(totalPrice * 100)/100)
         return totalPrice
     }
     
