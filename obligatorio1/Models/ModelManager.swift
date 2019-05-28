@@ -194,8 +194,8 @@ class ModelManager {
             }
             
             if let purchasesResponse = response {
-                self.purchases = purchasesResponse
-                onCompletion(purchasesResponse, nil)
+                self.purchases = purchasesResponse.reversed()
+                onCompletion(purchasesResponse.reversed(), nil)
             }
         }
     }

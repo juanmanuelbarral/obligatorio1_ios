@@ -48,7 +48,7 @@ class Product {
             self.category = Constants.Product.CATEGORY_DEFAULT_VALUE
         }
         if map.JSON[Constants.Product.PHOTO_URL_KEY] == nil {
-            self.photoUrl = Constants.Product.PHOTO_URL_DEFAULT_VALUE2
+            self.photoUrl = Constants.Product.PHOTO_URL_DEFAULT_VALUE
         }
     }
 }
