@@ -17,19 +17,16 @@ class PurchaseTableViewCell: UITableViewCell {
     @IBOutlet weak var detailButton: UIButton!
     
 //    PROPERTIES
+    var delegate: PurchaseCellDelegate?
     var _purchase: Purchase?
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
-    
     
     /// Function that configures the cell with its needed information
     ///
@@ -51,5 +48,11 @@ class PurchaseTableViewCell: UITableViewCell {
         // Formating the cell
         // setting selection style to none so the cell doesn't turn gray or blue when touching it
         self.selectionStyle = UITableViewCell.SelectionStyle.none
+    }
+    
+    @IBAction func detailButtonClick(_ sender: Any) {
+        if let delegate = delegate {
+            delegate.onDetailClick(cell: self)
+        }
     }
 }

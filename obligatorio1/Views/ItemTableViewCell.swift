@@ -74,14 +74,21 @@ class ItemTableViewCell: UITableViewCell {
     }
     
     @IBAction func addButtonClick(_ sender: Any) {
-        delegate?.onAddButtonClick(cell: self)
+        if let delegate = delegate {
+            delegate.onAddButtonClick(cell: self)
+        }
+        
     }
     
     @IBAction func plusButtonClick(_ sender: Any) {
-        delegate?.onPlusButtonClick(cell: self)
+        if let delegate = delegate {
+            delegate.onPlusButtonClick(cell: self)
+        }
     }
     
     @IBAction func minusButtonClick(_ sender: Any) {
-        delegate?.onMinusButtonClick(cell: self)
+        if let delegate = delegate {
+            delegate.onMinusButtonClick(cell: self)
+        }
     }
 }

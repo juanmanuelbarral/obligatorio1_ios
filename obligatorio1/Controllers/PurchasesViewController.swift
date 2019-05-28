@@ -25,7 +25,6 @@ class PurchasesViewController: UIViewController {
         vcUtils.showActivityIndicatory(uiView: self.view)
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         modelManager.loadPurchases(onCompletion: { (purchases: [Purchase]?, error: Error?) in
             // stop loader
@@ -49,17 +48,9 @@ class PurchasesViewController: UIViewController {
         vcUtils.updateNavigationTitle(element: self, title: "Purchases", prefersLargeTitles: true)
     }
     
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let checkoutViewController = segue.destination as? CheckoutViewController {
             checkoutViewController.state = .READ_ONLY
-        }
-    }
-    
-
-    @IBAction func detailButtonClick(_ sender: Any) {
-        if let indexPath = vcUtils.getIndexPath(of: sender, tableView: purchasesTableView) {
-            onSeeDetailClick(indexPath: indexPath)
         }
     }
 }
@@ -70,7 +61,6 @@ extension PurchasesViewController: UITableViewDataSource {
         return modelManager.getPurchases().count
     }
     
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = purchasesTableView.dequeueReusableCell(withIdentifier: "purchaseCell", for: indexPath) as? PurchaseTableViewCell else {
             fatalError("The dequeued cell is not an instance of PurchaseTableViewCell")
@@ -80,6 +70,7 @@ extension PurchasesViewController: UITableViewDataSource {
         let purchase = modelManager.getPurchase(index: indexPath.row)
         
         // Config the cell
+        cell.delegate = self
         cell.configCell(item: purchase)
         
         return cell
@@ -87,12 +78,12 @@ extension PurchasesViewController: UITableViewDataSource {
 }
 
 
-extension PurchasesViewController: UITableViewDelegate {
-    /// Function performed when the user taps on the see detail button of the tableView cells
-    ///
-    /// - Parameter indexPath: indexPath from the cell where the button belongs
-    private func onSeeDetailClick(indexPath: IndexPath) {
-        let purchase = modelManager.getPurchase(index: indexPath.row)
+extension PurchasesViewController: UITableViewDelegate {}
+
+
+extension PurchasesViewController: PurchaseCellDelegate {
+    func onDetailClick(cell: PurchaseTableViewCell) {
+        let purchase = cell._purchase!
         modelManager.purchaseCheckoutItemsRO = purchase.checkoutItems ?? []
         performSegue(withIdentifier: "toCheckoutFromPurchases", sender: nil)
     }

@@ -16,6 +16,7 @@
 		920FE30D227284FB0073805D /* CheckoutItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920FE30C227284FB0073805D /* CheckoutItem.swift */; };
 		920FE30F22728F0D0073805D /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920FE30E22728F0D0073805D /* ModelManager.swift */; };
 		921911C1229CDEAD002610C1 /* ItemCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921911C0229CDEAD002610C1 /* ItemCellDelegate.swift */; };
+		921911C3229CE693002610C1 /* PurchaseCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921911C2229CE693002610C1 /* PurchaseCellDelegate.swift */; };
 		92600F222299CD6900F6E6D0 /* ViewControllerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92600F212299CD6900F6E6D0 /* ViewControllerUtils.swift */; };
 		9265CFF1229A0E2600085709 /* CustomDateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9265CFF0229A0E2600085709 /* CustomDateTransform.swift */; };
 		926BC5922299BEB20020938F /* PurchasesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926BC5912299BEB20020938F /* PurchasesViewController.swift */; };
@@ -44,6 +45,7 @@
 		920FE30C227284FB0073805D /* CheckoutItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutItem.swift; sourceTree = "<group>"; };
 		920FE30E22728F0D0073805D /* ModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
 		921911C0229CDEAD002610C1 /* ItemCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCellDelegate.swift; sourceTree = "<group>"; };
+		921911C2229CE693002610C1 /* PurchaseCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseCellDelegate.swift; sourceTree = "<group>"; };
 		92600F212299CD6900F6E6D0 /* ViewControllerUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerUtils.swift; sourceTree = "<group>"; };
 		9265CFF0229A0E2600085709 /* CustomDateTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomDateTransform.swift; sourceTree = "<group>"; };
 		926BC5912299BEB20020938F /* PurchasesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesViewController.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				921911C0229CDEAD002610C1 /* ItemCellDelegate.swift */,
+				921911C2229CE693002610C1 /* PurchaseCellDelegate.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				920FE30B22727FD30073805D /* Promotion.swift in Sources */,
+				921911C3229CE693002610C1 /* PurchaseCellDelegate.swift in Sources */,
 				920FE30F22728F0D0073805D /* ModelManager.swift in Sources */,
 				92938B272297768600EDBCB1 /* CartItem.swift in Sources */,
 				92EEEB2A228E3F760052A114 /* AuthenticationManager.swift in Sources */,
