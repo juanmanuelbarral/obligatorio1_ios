@@ -114,7 +114,7 @@
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <state key="normal" title="Add"/>
                                                     <connections>
-                                                        <action selector="addButtonClick:" destination="0WW-Hx-8Bj" eventType="touchUpInside" id="38L-dF-5MI"/>
+                                                        <action selector="addButtonClick:" destination="OZG-au-LqP" eventType="touchUpInside" id="9IW-BE-5YY"/>
                                                     </connections>
                                                 </button>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ecV-8u-poF" userLabel="Quantity View">
@@ -127,7 +127,7 @@
                                                             </constraints>
                                                             <state key="normal" image="icon-plus"/>
                                                             <connections>
-                                                                <action selector="plusButtonClick:" destination="0WW-Hx-8Bj" eventType="touchUpInside" id="cLR-kZ-pYu"/>
+                                                                <action selector="plusButtonClick:" destination="OZG-au-LqP" eventType="touchUpInside" id="OJk-y4-Tw8"/>
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pMB-bL-EW0" userLabel="Minus Button">
@@ -138,7 +138,7 @@
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                             <state key="normal" image="icon-minus"/>
                                                             <connections>
-                                                                <action selector="minusButtonClick:" destination="0WW-Hx-8Bj" eventType="touchUpInside" id="wzi-tK-8AP"/>
+                                                                <action selector="minusButtonClick:" destination="OZG-au-LqP" eventType="touchUpInside" id="d9V-ra-WGp"/>
                                                             </connections>
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yxu-Xl-HOa" userLabel="Quantity Label">
@@ -540,6 +540,6 @@
         <image name="icon-plus" width="12" height="12"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="6HG-5M-bCg"/>
+        <segue reference="2ft-t3-GF3"/>
     </inferredMetricsTieBreakers>
 </document>

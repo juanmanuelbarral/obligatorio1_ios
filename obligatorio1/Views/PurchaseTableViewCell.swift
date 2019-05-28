@@ -16,6 +16,9 @@ class PurchaseTableViewCell: UITableViewCell {
     @IBOutlet weak var totalPriceLabel: UILabel!
     @IBOutlet weak var detailButton: UIButton!
     
+//    PROPERTIES
+    var _purchase: Purchase?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -33,6 +36,8 @@ class PurchaseTableViewCell: UITableViewCell {
     /// - Parameters:
     ///   - item: item to be reflected on the cell
     func configCell(item: Purchase) {
+        self._purchase = item
+        
         // Formatting the date and total price
         dateDayLabel.text = item.dateDayToString(dayFormat: .medium) ?? "Date not found"
         dateHourLabel.text = item.dateTimeToString(timeFormat: .short) ?? ""

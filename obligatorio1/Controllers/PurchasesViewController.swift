@@ -39,6 +39,10 @@ class PurchasesViewController: UIViewController {
             
             if purchases != nil {
                 self.purchasesTableView.reloadData()
+                if purchases!.isEmpty {
+                    let errorAlert = self.vcUtils.errorAlert(title: "Empty list", message: "Looks like you haven't made any purchase yet")
+                    self.present(errorAlert, animated: true, completion: nil)
+                }
             }
         })
         

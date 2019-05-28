@@ -21,15 +21,17 @@ class ItemTableViewCell: UITableViewCell {
     @IBOutlet weak var minusButton: UIButton!
     @IBOutlet weak var quantityControlView: UIView!
     
+//    PROPERTIES
+    var delegate: ItemCellDelegate?
+    var _product: Product?
+    var _quantity: Int?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
     /// Function that configures the cell with its needed information
@@ -37,12 +39,15 @@ class ItemTableViewCell: UITableViewCell {
     /// - Parameters:
     ///   - item: item to be reflected on the cell
     ///   - units: units of that item on the cart
-    func configCell(item: Product, units: Int) {
+    func configCell(product: Product, quantity: Int) {
+        self._product = product
+        self._quantity = quantity
+        
         // Formatting the photoUrl, name and price
-        itemImageView.kf.setImage(with: URL(string: item.photoUrl!))
+        itemImageView.kf.setImage(with: URL(string: product.photoUrl!))
         itemImageView.layer.cornerRadius = itemImageView.frame.size.width/2
-        nameLabel.text = item.name
-        priceLabel.text = "$\(item.price!)"
+        nameLabel.text = product.name
+        priceLabel.text = "$\(product.price!)"
         
         
         // Formatting the addButton, and quantityControllerView
@@ -53,13 +58,13 @@ class ItemTableViewCell: UITableViewCell {
         quantityControlView.layer.borderColor = UIColor.lightGray.cgColor
         quantityControlView.layer.borderWidth = 1
         
-        if units > 0 {
+        if quantity > 0 {
             addButton.isHidden = true
-            quantityLabel.text = String(units)
+            quantityLabel.text = String(quantity)
             quantityControlView.isHidden = false
         } else {
             addButton.isHidden = false
-            quantityLabel.text = String(units)
+            quantityLabel.text = String(quantity)
             quantityControlView.isHidden = true
         }
         
@@ -68,4 +73,15 @@ class ItemTableViewCell: UITableViewCell {
         self.selectionStyle = UITableViewCell.SelectionStyle.none
     }
     
+    @IBAction func addButtonClick(_ sender: Any) {
+        delegate?.onAddButtonClick(cell: self)
+    }
+    
+    @IBAction func plusButtonClick(_ sender: Any) {
+        delegate?.onPlusButtonClick(cell: self)
+    }
+    
+    @IBAction func minusButtonClick(_ sender: Any) {
+        delegate?.onMinusButtonClick(cell: self)
+    }
 }
