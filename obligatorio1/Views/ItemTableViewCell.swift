@@ -58,6 +58,10 @@ class ItemTableViewCell: UITableViewCell {
         quantityControlView.layer.borderColor = UIColor.lightGray.cgColor
         quantityControlView.layer.borderWidth = 1
         
+        // Plus and minus button
+        plusButton.isEnabled = !(quantity >= Constants.CheckoutItem.MAX_QUANTITY)
+        minusButton.isEnabled = true
+        
         if quantity > 0 {
             addButton.isHidden = true
             quantityLabel.text = String(quantity)
